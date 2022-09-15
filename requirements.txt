@@ -39,9 +39,6 @@ seaborn==0.12.0
 six==1.16.0
 stack-data==0.2.0
 thop==0.1.1.post2209072238
-torch==1.7.1+cu110
-torchaudio==0.7.2
-torchvision==0.8.2+cu110
 tornado==6.1
 tqdm==4.64.1
 traitlets==5.2.2.post1
