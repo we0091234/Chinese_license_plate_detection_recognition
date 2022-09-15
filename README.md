@@ -1,8 +1,12 @@
-环境配置:
+ 环境配置:
+
+1.安装其他依赖
 
 ```
 pip install -r  requirements.txt
 ```
+
+2.安装 pytorch  gpu 版本和cpu版本都可以   pytorch版本>=1.7
 
 运行:
 
@@ -33,7 +37,6 @@ crnn:
 1.蓝牌 2.黄牌 3.双层黄牌 4.农用车牌 5 警车 6 校车 7 教练车 8 港澳车牌 9 使领馆 10 武警 11 新能源 12 等等。。。
 
 ![Image text](result/3.jpg)
-
 
 ![Image text](result/13.jpg)
 
