@@ -1,6 +1,6 @@
  环境配置:
 
-1.安装其他依赖python 最好>=3.8
+1.安装其他依赖
 
 ```
 pip install -r  requirements.txt
