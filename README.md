@@ -34,22 +34,41 @@ crnn:
 
 支持如下：
 
-1.蓝牌 2.黄牌 3.双层黄牌 4.农用车牌 5 警车 6 校车 7 教练车 8 港澳车牌 9 使领馆 10 武警 11 新能源 12 等等。。。
+1.单行蓝牌 
+2.单行黄牌
+3.新能源车牌 
+4.白色警用车牌 
+5 教练车牌 
+6 武警车牌 
+7 双层黄牌 
+8 双层武警 
+8 使馆车牌
+9 港牌车
+10 澳牌车
+11 双层农用车牌 
+11.其他
 
-![Image text](result/3.jpg)
+![Image 单行蓝牌](result/single_blue.jpg)
 
-![Image text](result/13.jpg)
+![Image 单行黄牌](result/single_yellow.jpg)
 
-![Image text](result/14.jpg)
+![Image 新能源](result/single_green.jpg)
 
-![Image text](result/15.jpg)
+![Image 白色警用车牌](result/police.jpg)
 
-![Image text](result/17.jpg)
+![Image 教练车牌](result/xue.jpg)
 
-![Image text](result/18.jpg)
+![Image 武警单层](result/Wj.jpg)
 
-![Image text](result/tmp10B1.jpg)
+![Image 双层黄牌](result/double_yellow.jpg)
 
-![Image text](result/tmp93E9)
+![Image 双层武警](result/WJdouble.jpg)
 
-![Image text](result/7.jpg)
+![Image 使领馆](result/shi_lin_guan.jpg)
+
+![Image 港牌](result/hongkang1.jpg)
+
+![Image 澳牌](result/aomen1.jpg)
+
+![Image 双层农用车牌](result/nongyong_double.jpg)
+
