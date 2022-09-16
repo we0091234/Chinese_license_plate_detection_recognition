@@ -50,10 +50,9 @@ crnn:
 
 [bgshih/crnn: Convolutional Recurrent Neural Network (CRNN) for image-based sequence recognition. (github.com)](https://github.com/bgshih/crnn)
 
+**有问题可以提issues 或者加qq群:871797331 询问**
+
 支持如下：
-
-
-
 
 **1.单行蓝牌**
 ![Image 单行蓝牌](result/single_blue.jpg)
