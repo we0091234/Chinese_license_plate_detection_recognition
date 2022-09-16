@@ -50,26 +50,38 @@ crnn:
 
 1.单行蓝牌 
 ![Image 单行蓝牌](result/single_blue.jpg)
+
 2.单行黄牌
 ![Image 单行黄牌](result/single_yellow.jpg)
+
 3.新能源车牌 
 ![Image 新能源](result/single_green.jpg)
+
 4.白色警用车牌 
 ![Image 白色警用车牌](result/police.jpg)
-5 教练车牌 
+
+5. 教练车牌 
 ![Image 教练车牌](result/xue.jpg)
-6 武警车牌 
+
+6. 武警车牌 
 ![Image 武警单层](result/Wj.jpg)
-7 双层黄牌 
+
+7. 双层黄牌 
 ![Image 双层黄牌](result/double_yellow.jpg)
-8 双层武警 
+
+8. 双层武警 
 ![Image 双层武警](result/WJdouble.jpg)
-9 使馆车牌
+
+9. 使馆车牌
 ![Image 使领馆](result/shi_lin_guan.jpg)
-10 港牌车
+
+10. 港牌车
 ![Image 港牌](result/hongkang1.jpg)
-11 澳牌车
+
+
+11. 澳牌车
 ![Image 澳牌](result/aomen1.jpg)
-12 双层农用车牌 
+
+12. 双层农用车牌 
 ![Image 双层农用车牌](result/nongyong_double.jpg)
 
