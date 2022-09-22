@@ -15,7 +15,7 @@ val: /mnt/Gpan/Mydata/pytorchPorject/yolov5-face/ccpd/val  # 16551 images
 #val: /ssd_1t/derron/yolov5-face/data/widerface/train/  # 4952 images
 
 # number of classes
-nc: 1
+nc: 2
 
 # class names
-names: [ 'face']
+names: [ 'single','double']

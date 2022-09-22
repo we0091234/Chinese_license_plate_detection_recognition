@@ -6,11 +6,17 @@ import numpy as np
 import os
 import time
 import sys
+
+def cv_imread(path):  #可以读取中文路径的图片
+    img=cv2.imdecode(np.fromfile(path,dtype=np.uint8),-1)
+    return img
+
 def allFilePath(rootPath,allFIleList):
     fileList = os.listdir(rootPath)
     for temp in fileList:
         if os.path.isfile(os.path.join(rootPath,temp)):
-            allFIleList.append(os.path.join(rootPath,temp))
+            if temp.endswith('.jpg') or temp.endswith('.png') or temp.endswith('.JPG'):
+                allFIleList.append(os.path.join(rootPath,temp))
         else:
             allFilePath(os.path.join(rootPath,temp),allFIleList)
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device("cpu")
@@ -39,7 +45,7 @@ def image_processing(img,device):
     img = img.view(1, *img.size())
     return img
 
-def get_plate_result(img):
+def get_plate_result(img,device,model):
     input = image_processing(img,device)
     preds = model(input)
     # print(preds)
@@ -52,9 +58,9 @@ def get_plate_result(img):
     #     return ""
     return plate
 
-def init_model(device):
+def init_model(device,rec_model_path):
     # print( print(sys.path))
-    model_path ="plate_recognition/model/checkpoint_98_acc_0.9684.pth"
+    model_path =rec_model_path
     model_path = os.sep.join([sys.path[0],model_path])
     model = myNet_ocr(num_classes=78,export=True)
     model_state = torch.load(model_path,map_location=device)['state_dict']
@@ -63,7 +69,7 @@ def init_model(device):
     model.eval()
     return model
 
-model = init_model(device)
+# model = init_model(device)
 if __name__ == '__main__':
 
    image_path ="images/tmp2424.png"

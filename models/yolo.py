@@ -56,7 +56,7 @@ class Detect(nn.Module):
                     self.grid[i], self.anchor_grid[i] = self._make_grid_new(nx, ny,i)
 
                 y = torch.full_like(x[i], 0)
-                y = y + torch.cat((x[i][:, :, :, :, 0:5].sigmoid(), torch.cat((x[i][:, :, :, :, 5:15], x[i][:, :, :, :, 15:15+self.nc].sigmoid()), 4)), 4)
+                y = y + torch.cat((x[i][:, :, :, :, 0:5].sigmoid(), torch.cat((x[i][:, :, :, :, 5:13], x[i][:, :, :, :, 13:13+self.nc].sigmoid()), 4)), 4)
 
                 box_xy = (y[:, :, :, :, 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i] # xy
                 box_wh = (y[:, :, :, :, 2:4] * 2) ** 2 * self.anchor_grid[i] # wh
@@ -66,10 +66,10 @@ class Detect(nn.Module):
                 landm2 = y[:, :, :, :, 7:9] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x2 y2
                 landm3 = y[:, :, :, :, 9:11] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x3 y3
                 landm4 = y[:, :, :, :, 11:13] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x4 y4
-                landm5 = y[:, :, :, :, 13:15] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x5 y5
+                # landm5 = y[:, :, :, :, 13:13] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x5 y5
                 # landm = torch.cat((landm1, torch.cat((landm2, torch.cat((landm3, torch.cat((landm4, landm5), 4)), 4)), 4)), 4)
-                # y = torch.cat((box_conf, torch.cat((landm, y[:, :, :, :, 15:15+self.nc]), 4)), 4)
-                y = torch.cat([box_xy, box_wh, y[:, :, :, :, 4:5], landm1, landm2, landm3, landm4, landm5, y[:, :, :, :, 15:15+self.nc]], -1)
+                # y = torch.cat((box_conf, torch.cat((landm, y[:, :, :, :, 13:13+self.nc]), 4)), 4)
+                y = torch.cat([box_xy, box_wh, y[:, :, :, :, 4:5], landm1, landm2, landm3, landm4, landm5, y[:, :, :, :, 13:13+self.nc]], -1)
 
                 z.append(y.view(bs, -1, self.no))
             return torch.cat(z, 1)
@@ -84,26 +84,26 @@ class Detect(nn.Module):
                     self.grid[i] = self._make_grid(nx, ny).to(x[i].device)
 
                 y = torch.full_like(x[i], 0)
-                class_range = list(range(5)) + list(range(15,15+self.nc))
+                class_range = list(range(5)) + list(range(13,13+self.nc))
                 y[..., class_range] = x[i][..., class_range].sigmoid()
-                y[..., 5:15] = x[i][..., 5:15]
+                y[..., 5:13] = x[i][..., 5:13]
                 #y = x[i].sigmoid()
 
                 y[..., 0:2] = (y[..., 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i]  # xy
                 y[..., 2:4] = (y[..., 2:4] * 2) ** 2 * self.anchor_grid[i]  # wh
 
-                #y[..., 5:15] = y[..., 5:15] * 8 - 4
+                #y[..., 5:13] = y[..., 5:13] * 8 - 4
                 y[..., 5:7]   = y[..., 5:7] *   self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i] # landmark x1 y1
                 y[..., 7:9]   = y[..., 7:9] *   self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]# landmark x2 y2
                 y[..., 9:11]  = y[..., 9:11] *  self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]# landmark x3 y3
                 y[..., 11:13] = y[..., 11:13] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]# landmark x4 y4
-                y[..., 13:15] = y[..., 13:15] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]# landmark x5 y5
+                # y[..., 13:13] = y[..., 13:13] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]# landmark x5 y5
 
                 #y[..., 5:7] = (y[..., 5:7] * 2 -1) * self.anchor_grid[i]  # landmark x1 y1
                 #y[..., 7:9] = (y[..., 7:9] * 2 -1) * self.anchor_grid[i]  # landmark x2 y2
                 #y[..., 9:11] = (y[..., 9:11] * 2 -1) * self.anchor_grid[i]  # landmark x3 y3
                 #y[..., 11:13] = (y[..., 11:13] * 2 -1) * self.anchor_grid[i]  # landmark x4 y4
-                #y[..., 13:15] = (y[..., 13:15] * 2 -1) * self.anchor_grid[i]  # landmark x5 y5
+                #y[..., 13:13] = (y[..., 13:13] * 2 -1) * self.anchor_grid[i]  # landmark x5 y5
 
                 z.append(y.view(bs, -1, self.no))
 

@@ -123,7 +123,7 @@ def test(data,
 
         # Statistics per image
         for si, pred in enumerate(output):
-            pred = torch.cat((pred[:, :5], pred[:, 15:]), 1) # throw landmark in thresh
+            pred = torch.cat((pred[:, :5], pred[:, 13:]), 1) # throw landmark in thresh
             labels = targets[targets[:, 0] == si, 1:]
             nl = len(labels)
             tcls = labels[:, 0].tolist() if nl else []  # target class
