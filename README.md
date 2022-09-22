@@ -16,13 +16,7 @@
 
  环境配置:
 
-1.安装其他依赖
-
-```
-pip install -r  requirements.txt
-```
-
-2.安装 pytorch  gpu 版本和cpu版本都可以   pytorch版本>=1.7
+1.python >=3.6  pytorch >=1.7
 
 运行:
 
@@ -32,15 +26,23 @@ python detect_plate.py
 
 测试文件夹imgs，结果保存再 result 文件夹中
 
+```
 parser.add_argument('--image_path', type=str, default='imgs', help='source')  # file/folder, 0 for webcam
+```
 
---image_path 修改为自己的路劲即可
+`<b>`<font size=8 color=red >**车牌训练**`</font></b>`
 
-车牌检测参考：
-
-yolov5-face:
+参考yolov5-face:
 
 [deepcam-cn/yolov5-face: YOLO5Face: Why Reinventing a Face Detector (https://arxiv.org/abs/2105.12931) ECCV Workshops 2022) (github.com)](https://github.com/deepcam-cn/yolov5-face)
+
+1. 下载数据集：链接：https://pan.baidu.com/s/1xCYunxRoT3Xv8TeE2t1kPQ   提取码：trbl
+2. 修改 data/widerface.yaml    train和val路径
+3. ```
+   python3 train.py --data data/widerface.yaml --cfg models/yolov5n-0.5.yaml --weights weights/best.pt --epoch 250
+   ```
+
+   结果存在run文件夹中
 
 车牌识别参考：
 
