@@ -1,6 +1,6 @@
 <!-- <big>**史上最全车牌识别算法，支持11种中文车牌类型：**</big> -->
 
- `<b>`<font size=8 color=red >**史上最全车牌识别算法，支持11种中文车牌类型：**`</font></b>`
+**最全车牌识别算法，支持11种中文车牌类型**
 
 **1.单行蓝牌**
 **2.单行黄牌**
@@ -30,7 +30,7 @@ python detect_plate.py
 parser.add_argument('--image_path', type=str, default='imgs', help='source')  # file/folder, 0 for webcam
 ```
 
-`<b>`<font size=8 color=red >**车牌训练**`</font></b>`
+**车牌训练**
 
 参考yolov5-face:
 
