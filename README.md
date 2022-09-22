@@ -30,13 +30,20 @@ python detect_plate.py
 parser.add_argument('--image_path', type=str, default='imgs', help='source')  # file/folder, 0 for webcam
 ```
 
-**车牌训练**
+**车牌检测训练**
 
 参考yolov5-face:
 
 [deepcam-cn/yolov5-face: YOLO5Face: Why Reinventing a Face Detector (https://arxiv.org/abs/2105.12931) ECCV Workshops 2022) (github.com)](https://github.com/deepcam-cn/yolov5-face)
 
-1. 下载数据集：链接：https://pan.baidu.com/s/1xCYunxRoT3Xv8TeE2t1kPQ   提取码：trbl
+1. 下载数据集：链接：https://pan.baidu.com/s/1xCYunxRoT3Xv8TeE2t1kPQ   提取码：trbl     数据从CCPD数据集中选取并转换的
+   数据集格式为yolo格式：
+
+   ```
+   label x y w h  pt1x pt1y pt2x pt2y pt3x pt3y pt4x pt4y
+   ```
+
+   坐标都是经过归一化，x,y是中心点除以图片宽高，w,h是框的宽高除以图片宽高，ptx，pty是关键点坐标除以宽高
 2. 修改 data/widerface.yaml    train和val路径
 3. ```
    python3 train.py --data data/widerface.yaml --cfg models/yolov5n-0.5.yaml --weights weights/best.pt --epoch 250
