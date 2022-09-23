@@ -42,7 +42,7 @@ parser.add_argument('--image_path', type=str, default='imgs', help='source')  # 
    ```
    label x y w h  pt1x pt1y pt2x pt2y pt3x pt3y pt4x pt4y
    ```
-
+   关键点依次是（左上，右上，右下，左下）
    坐标都是经过归一化，x,y是中心点除以图片宽高，w,h是框的宽高除以图片宽高，ptx，pty是关键点坐标除以宽高
 2. 修改 data/widerface.yaml    train和val路径
 3. ```

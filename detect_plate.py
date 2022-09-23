@@ -336,7 +336,7 @@ if __name__ == '__main__':
     if not os.path.exists(save_path):
         os.mkdir(save_path)
 
-    detect_model = load_model(opt.detect_model, device)  #初始化监测模型
+    detect_model = load_model(opt.detect_model, device)  #初始化检测模型
     plate_rec_model=init_model(device,opt.rec_model)      #初始化识别模型
 
     for img_path in file_list:
