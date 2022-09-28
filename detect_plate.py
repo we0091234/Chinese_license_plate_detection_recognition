@@ -178,9 +178,9 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
 
 
 
-def detect_Recognition_plate(model, orgimg, device,plate_rec_model):
+def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size):
     # Load model
-    img_size = 640
+    # img_size = opt_img_size
     conf_thres = 0.3
     iou_thres = 0.5
     dict_list=[]
@@ -308,9 +308,9 @@ def draw_result(orgimg,dict_list):
         landmarks=result['landmarks']
         result = result['plate_no']
         # print(result)
-        # for i in range(4):  #关键点
-            # cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
-        cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,255,0),2) #画框
+        for i in range(4):  #关键点
+            cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
+        # cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,255,0),2) #画框
         if len(result)>=1:
             orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(255,0,0),height_area)
     return orgimg
@@ -321,9 +321,9 @@ def draw_result(orgimg,dict_list):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model', nargs='+', type=str, default='weights/best.pt', help='model.pt path(s)')  #检测模型
-    parser.add_argument('--rec_model', nargs='+', type=str, default='plate_recognition/model/checkpoint_98_acc_0.9684.pth', help='model.pt path(s)')#识别模型
+    parser.add_argument('--rec_model', nargs='+', type=str, default='plate_recognition/model/checkpoint_61_acc_0.9715.pth', help='model.pt path(s)')#识别模型
     parser.add_argument('--image_path', type=str, default='imgs', help='source')  # file/folder, 0 for webcam
-    parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
+    parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # device =torch.device("cpu")
     opt = parser.parse_args()
@@ -331,7 +331,7 @@ if __name__ == '__main__':
 
     file_list=[]
     allFilePath(opt.image_path,file_list)
-    save_path = "result"
+    save_path = "result1"
     count=0
     if not os.path.exists(save_path):
         os.mkdir(save_path)
@@ -348,7 +348,7 @@ if __name__ == '__main__':
         if img.shape[-1]==4:
             img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
         # detect_one(model,img_path,device)
-        dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model)
+        dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
         ori_img=draw_result(img,dict_list)
         img_name = os.path.basename(img_path)
         save_img_path = os.path.join(save_path,img_name)

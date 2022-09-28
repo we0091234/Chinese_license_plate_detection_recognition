@@ -20,7 +20,7 @@ def allFilePath(rootPath,allFIleList):
         else:
             allFilePath(os.path.join(rootPath,temp),allFIleList)
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device("cpu")
-plateName="#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民深危险品0123456789ABCDEFGHJKLMNPQRSTUVWXYZ"
+plateName=r"#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民航深0123456789ABCDEFGHJKLMNPQRSTUVWXYZ"
 mean_value,std_value=(0.588,0.193)
 def decodePlate(preds):
     pre=0
@@ -58,12 +58,15 @@ def get_plate_result(img,device,model):
     #     return ""
     return plate
 
-def init_model(device,rec_model_path):
+def init_model(device,model_path):
     # print( print(sys.path))
-    model_path =rec_model_path
+    # model_path ="plate_recognition/model/checkpoint_61_acc_0.9715.pth"
+    check_point = torch.load(model_path,map_location=device)
+    model_state=check_point['state_dict']
+    cfg=check_point['cfg']
     model_path = os.sep.join([sys.path[0],model_path])
-    model = myNet_ocr(num_classes=78,export=True)
-    model_state = torch.load(model_path,map_location=device)['state_dict']
+    model = myNet_ocr(num_classes=78,export=True,cfg=cfg)
+   
     model.load_state_dict(model_state)
     model.to(device)
     model.eval()
