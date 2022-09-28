@@ -331,7 +331,7 @@ if __name__ == '__main__':
 
     file_list=[]
     allFilePath(opt.image_path,file_list)
-    save_path = "result1"
+    save_path = "result"
     count=0
     if not os.path.exists(save_path):
         os.mkdir(save_path)

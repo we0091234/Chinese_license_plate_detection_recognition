@@ -21,3 +21,4 @@ result1/
 !*.jpg
 !*.pt
 !*.npy
+!*.pth
