@@ -308,9 +308,9 @@ def draw_result(orgimg,dict_list):
         landmarks=result['landmarks']
         result = result['plate_no']
         # print(result)
-        for i in range(4):  #关键点
-            cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
-        # cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,255,0),2) #画框
+        # for i in range(4):  #关键点
+        #     cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
+        cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,255,0),2) #画框
         if len(result)>=1:
             orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(255,0,0),height_area)
     return orgimg
