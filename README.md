@@ -38,7 +38,7 @@ parser.add_argument('--image_path', type=str, default='imgs', help='source')  # 
 
 [deepcam-cn/yolov5-face: YOLO5Face: Why Reinventing a Face Detector (https://arxiv.org/abs/2105.12931) ECCV Workshops 2022) (github.com)](https://github.com/deepcam-cn/yolov5-face)
 
-1. 下载数据集：链接：https://pan.baidu.com/s/1xCYunxRoT3Xv8TeE2t1kPQ   提取码：trbl     数据从CCPD数据集中选取并转换的
+1. 下载数据集：链接：https://pan.baidu.com/s/1xCYunxRoT3Xv8TeE2t1kPQ   提取码：trbl     数据从CCPD和CRPD数据集中选取并转换的
    数据集格式为yolo格式：
 
    ```
