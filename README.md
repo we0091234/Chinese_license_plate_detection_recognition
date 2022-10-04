@@ -57,9 +57,9 @@ parser.add_argument('--image_path', type=str, default='imgs', help='source')  # 
 
 ## **车牌识别训练**
 
-crnn:
+车牌识别训练链接如下：
 
-[Recurrent Neural Network (CRNN) for image-based sequence recognition. (github.com)](https://github.com/bgshih/crnn)
+[车牌识别训练](https://github.com/we0091234/crnn_plate_recognition)
 
 **有问题可以提issues 或者加qq群:871797331 询问**
 
