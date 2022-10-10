@@ -32,7 +32,7 @@ class Detect(nn.Module):
         super(Detect, self).__init__()
         self.nc = nc  # number of classes
         #self.no = nc + 5  # number of outputs per anchor
-        self.no = nc + 5 + 10  # number of outputs per anchor
+        self.no = nc + 5 + 8  # number of outputs per anchor
 
         self.nl = len(anchors)  # number of detection layers
         self.na = len(anchors[0]) // 2  # number of anchors
@@ -69,7 +69,7 @@ class Detect(nn.Module):
                 # landm5 = y[:, :, :, :, 13:13] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x5 y5
                 # landm = torch.cat((landm1, torch.cat((landm2, torch.cat((landm3, torch.cat((landm4, landm5), 4)), 4)), 4)), 4)
                 # y = torch.cat((box_conf, torch.cat((landm, y[:, :, :, :, 13:13+self.nc]), 4)), 4)
-                y = torch.cat([box_xy, box_wh, y[:, :, :, :, 4:5], landm1, landm2, landm3, landm4, landm5, y[:, :, :, :, 13:13+self.nc]], -1)
+                y = torch.cat([box_xy, box_wh, y[:, :, :, :, 4:5], landm1, landm2, landm3, landm4, y[:, :, :, :, 13:13+self.nc]], -1)
 
                 z.append(y.view(bs, -1, self.no))
             return torch.cat(z, 1)

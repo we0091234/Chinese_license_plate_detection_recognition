@@ -215,8 +215,8 @@ def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size):
     # Apply NMS
     pred = non_max_suppression_face(pred, conf_thres, iou_thres)
 
-    print('img.shape: ', img.shape)
-    print('orgimg.shape: ', orgimg.shape)
+    # print('img.shape: ', img.shape)
+    # print('orgimg.shape: ', orgimg.shape)
 
     # Process detections
     for i, det in enumerate(pred):  # detections per image
@@ -302,17 +302,19 @@ def detect_one(model, image_path, device):
     cv2.imwrite('result.jpg', orgimg)
 
 def draw_result(orgimg,dict_list):
+    result_str =""
     for result in dict_list:
         rect_area = result['rect']
         height_area = result['roi_height']
         landmarks=result['landmarks']
         result = result['plate_no']
-        # print(result)
+        result_str+=result+" "
         # for i in range(4):  #关键点
         #     cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
         cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,255,0),2) #画框
         if len(result)>=1:
             orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(255,0,0),height_area)
+    print(result_str)
     return orgimg
 
 
@@ -320,18 +322,16 @@ def draw_result(orgimg,dict_list):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--detect_model', nargs='+', type=str, default='weights/best.pt', help='model.pt path(s)')  #检测模型
-    parser.add_argument('--rec_model', nargs='+', type=str, default='plate_recognition/model/checkpoint_61_acc_0.9715.pth', help='model.pt path(s)')#识别模型
-    parser.add_argument('--image_path', type=str, default='imgs', help='source')  # file/folder, 0 for webcam
+    parser.add_argument('--detect_model', nargs='+', type=str, default='weights/plate_detect.pt', help='model.pt path(s)')  #检测模型
+    parser.add_argument('--rec_model', type=str, default='weights/plate_rec.pth', help='model.pt path(s)')#识别模型
+    parser.add_argument('--image_path', type=str, default='imgs', help='source') 
     parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
+    parser.add_argument('--output', type=str, default='result', help='source') 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # device =torch.device("cpu")
     opt = parser.parse_args()
     print(opt)
-
-    file_list=[]
-    allFilePath(opt.image_path,file_list)
-    save_path = "result"
+    save_path = opt.output
     count=0
     if not os.path.exists(save_path):
         os.mkdir(save_path)
@@ -339,18 +339,31 @@ if __name__ == '__main__':
     detect_model = load_model(opt.detect_model, device)  #初始化检测模型
     plate_rec_model=init_model(device,opt.rec_model)      #初始化识别模型
 
-    for img_path in file_list:
-        count+=1
-        print(count,img_path)
-        img =cv_imread(img_path)
-        if img is None:
-            continue
-        if img.shape[-1]==4:
-            img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
-        # detect_one(model,img_path,device)
-        dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
-        ori_img=draw_result(img,dict_list)
-        img_name = os.path.basename(img_path)
-        save_img_path = os.path.join(save_path,img_name)
-        cv2.imwrite(save_img_path,ori_img)
-       
+    if not os.path.isfile(opt.image_path):            #目录
+        file_list=[]
+        allFilePath(opt.image_path,file_list)
+        for img_path in file_list:
+            count+=1
+            print(count,img_path,end=" ")
+            img =cv_imread(img_path)
+            if img is None:
+                continue
+            if img.shape[-1]==4:
+                img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
+            # detect_one(model,img_path,device)
+            dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
+            ori_img=draw_result(img,dict_list)
+            img_name = os.path.basename(img_path)
+            save_img_path = os.path.join(save_path,img_name)
+            cv2.imwrite(save_img_path,ori_img)
+    else:                                          #单个图片
+            print(count,opt.image_path,end=" ")
+            img =cv_imread(opt.image_path)
+            if img.shape[-1]==4:
+                img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
+            # detect_one(model,img_path,device)
+            dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
+            ori_img=draw_result(img,dict_list)
+            img_name = os.path.basename(opt.image_path)
+            save_img_path = os.path.join(save_path,img_name)
+            cv2.imwrite(save_img_path,ori_img)  

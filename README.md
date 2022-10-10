@@ -23,14 +23,10 @@
 运行:
 
 ```
-python detect_plate.py
+python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weights/plate_rec.pth --image_path imgs --output result
 ```
 
 测试文件夹imgs，结果保存再 result 文件夹中
-
-```
-parser.add_argument('--image_path', type=str, default='imgs', help='source')  # file/folder, 0 for webcam
-```
 
 ## **车牌检测训练**
 
