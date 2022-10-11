@@ -49,20 +49,20 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
    ```
 
    结果存在run文件夹中
-4. **onnx export**
+4. **检测模型  onnx export**
    1.检测模型导出onnx,需要安装onnx-sim  **[onnx-simplifier](https://github.com/daquexian/onnx-simplifier)**
 
    ```
    python export.py --weights ./weights/plate_detect.pt --img 640 --batch 1
    ```
 
-    使用onnxsim
+   2.使用onnxsim
 
 ```
      onnxsim weights/plate_detect.onnx weights/plate_detect.onnx
 ```
 
-    2. 识别模型onnx见[we0091234/crnn_plate_recognition: 车牌识别 crnn 中文车牌 (github.com)](https://github.com/we0091234/crnn_plate_recognition)
+    5.**识别模型onnx见**[we0091234/crnn_plate_recognition: 车牌识别 crnn 中文车牌 (github.com)](https://github.com/we0091234/crnn_plate_recognition)
 
 ## **车牌识别训练**
 
