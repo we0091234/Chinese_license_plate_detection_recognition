@@ -34,7 +34,6 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 [deepcam-cn/yolov5-face: YOLO5Face: Why Reinventing a Face Detector (https://arxiv.org/abs/2105.12931) ECCV Workshops 2022) (github.com)](https://github.com/deepcam-cn/yolov5-face)
 
-
 1. 下载数据集：  [datasets](https://pan.baidu.com/s/1xCYunxRoT3Xv8TeE2t1kPQ) 提取码：trbl     数据从CCPD和CRPD数据集中选取并转换的
    数据集格式为yolo格式：
 
@@ -50,6 +49,20 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
    ```
 
    结果存在run文件夹中
+4. **onnx export**
+   1.检测模型导出onnx,需要安装onnx-sim  **[onnx-simplifier](https://github.com/daquexian/onnx-simplifier)**
+
+   ```
+   python export.py --weights ./weights/plate_detect.pt --img 640 --batch 1
+   ```
+
+    使用onnxsim
+
+```
+     onnxsim weights/plate_detect.onnx weights/plate_detect.onnx
+```
+
+    2. 识别模型onnx见[we0091234/crnn_plate_recognition: 车牌识别 crnn 中文车牌 (github.com)](https://github.com/we0091234/crnn_plate_recognition)
 
 ## **车牌识别训练**
 

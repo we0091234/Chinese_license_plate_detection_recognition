@@ -305,12 +305,21 @@ def draw_result(orgimg,dict_list):
     result_str =""
     for result in dict_list:
         rect_area = result['rect']
+        
+        x,y,w,h = rect_area[0],rect_area[1],rect_area[2]-rect_area[0],rect_area[3]-rect_area[1]
+        padding_w = 0.05*w
+        padding_h = 0.11*h
+        rect_area[0]=max(0,int(x-padding_w))
+        rect_area[1]=min(orgimg.shape[1],int(y-padding_h))
+        rect_area[2]=max(0,int(rect_area[2]+padding_w))
+        rect_area[3]=min(orgimg.shape[0],int(rect_area[3]+padding_h))
+
         height_area = result['roi_height']
         landmarks=result['landmarks']
         result = result['plate_no']
         result_str+=result+" "
-        # for i in range(4):  #关键点
-        #     cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
+        for i in range(4):  #关键点
+            cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
         cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,255,0),2) #画框
         if len(result)>=1:
             orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(255,0,0),height_area)
