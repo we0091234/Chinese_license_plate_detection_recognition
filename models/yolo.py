@@ -66,6 +66,11 @@ class Detect(nn.Module):
                 landm2 = y[:, :, :, :, 7:9] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x2 y2
                 landm3 = y[:, :, :, :, 9:11] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x3 y3
                 landm4 = y[:, :, :, :, 11:13] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x4 y4
+                prob=    y[:, :, :, :, 13:13+self.nc]
+                score,index_ = torch.max(prob,dim=-1,keepdim=True)
+                score=score.type(box_xy.dtype)
+                index_=index_.type(box_xy.dtype)
+                index =torch.argmax(prob,dim=-1,keepdim=True).type(box_xy.dtype)
                 # landm5 = y[:, :, :, :, 13:13] * self.anchor_grid[i] + self.grid[i].to(x[i].device) * self.stride[i]  # landmark x5 y5
                 # landm = torch.cat((landm1, torch.cat((landm2, torch.cat((landm3, torch.cat((landm4, landm5), 4)), 4)), 4)), 4)
                 # y = torch.cat((box_conf, torch.cat((landm, y[:, :, :, :, 13:13+self.nc]), 4)), 4)

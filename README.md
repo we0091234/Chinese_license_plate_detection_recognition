@@ -43,9 +43,11 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
    关键点依次是（左上，右上，右下，左下）
    坐标都是经过归一化，x,y是中心点除以图片宽高，w,h是框的宽高除以图片宽高，ptx，pty是关键点坐标除以宽高
-2. 修改 data/widerface.yaml    train和val路径
+2. 修改 data/widerface.yaml    train和val路径,换成你的数据路径
+
+   ![Image text](Screenshots/shouye.png)
 3. ```
-   python3 train.py --data data/widerface.yaml --cfg models/yolov5n-0.5.yaml --weights weights/best.pt --epoch 250
+   python3 train.py --data data/widerface.yaml --cfg models/yolov5n-0.5.yaml --weights weights/plate_detect.pt --epoch 250
    ```
 
    结果存在run文件夹中

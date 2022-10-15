@@ -196,6 +196,7 @@ def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size):
     imgsz = check_img_size(img_size, s=model.stride.max())  # check img_size
 
     img = letterbox(img0, new_shape=imgsz)[0]
+    # img =process_data(img0)
     # Convert
     img = img[:, :, ::-1].transpose(2, 0, 1).copy()  # BGR to RGB, to 3x416x416
 
@@ -258,6 +259,7 @@ def detect_one(model, image_path, device):
     imgsz = check_img_size(img_size, s=model.stride.max())  # check img_size
 
     img = letterbox(img0, new_shape=imgsz)[0]
+    # img =process_data(img0)
     # Convert
     img = img[:, :, ::-1].transpose(2, 0, 1).copy()  # BGR to RGB, to 3x416x416
 
@@ -335,7 +337,7 @@ if __name__ == '__main__':
     parser.add_argument('--rec_model', type=str, default='weights/plate_rec.pth', help='model.pt path(s)')#识别模型
     parser.add_argument('--image_path', type=str, default='imgs', help='source') 
     parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
-    parser.add_argument('--output', type=str, default='result', help='source') 
+    parser.add_argument('--output', type=str, default='result1', help='source') 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # device =torch.device("cpu")
     opt = parser.parse_args()
