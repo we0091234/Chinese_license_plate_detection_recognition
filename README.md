@@ -46,8 +46,14 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 2. 修改 data/widerface.yaml    train和val路径,换成你的数据路径
 
    ```
-   train: /your/train/path/
-   val: /your/val/path/  
+   train: /your/train/path #修改成你的路径
+   val: /your/val/path     #修改成你的路径
+   # number of classes
+   nc: 2                 #这里用的是2分类，0 单层车牌 1 双层车牌
+
+   # class names
+   names: [ 'single','double']
+
    ```
 3. ```
    python3 train.py --data data/widerface.yaml --cfg models/yolov5n-0.5.yaml --weights weights/plate_detect.pt --epoch 250
