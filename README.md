@@ -28,11 +28,14 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 测试文件夹imgs，结果保存再 result 文件夹中
 
+
+2.tensorrt 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
+
 ## **车牌检测训练**
 
 参考yolov5-face:
 
-[deepcam-cn/yolov5-face: YOLO5Face: Why Reinventing a Face Detector (https://arxiv.org/abs/2105.12931) ECCV Workshops 2022) (github.com)](https://github.com/deepcam-cn/yolov5-face)
+[yolov5-face:](https://github.com/deepcam-cn/yolov5-face)
 
 1. 下载数据集：  [datasets](https://pan.baidu.com/s/1xCYunxRoT3Xv8TeE2t1kPQ) 提取码：trbl     数据从CCPD和CRPD数据集中选取并转换的
    数据集格式为yolo格式：
