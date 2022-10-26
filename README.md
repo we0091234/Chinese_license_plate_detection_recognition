@@ -17,14 +17,13 @@
 **9 使馆车牌**
 **10 港澳牌车**
 **11 双层农用车牌**
-
 **12 民航车牌**
 
 ## **环境配置**
 
-1.python >=3.6  pytorch >=1.7
+**1.python >=3.6  pytorch >=1.7**
 
-运行:
+**运行:**
 
 ```
 python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weights/plate_rec.pth --image_path imgs --output result
@@ -32,7 +31,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 测试文件夹imgs，结果保存再 result 文件夹中
 
-2.onnx demo，onnx模型见[onnx模型](https://pan.baidu.com/s/1zfsQ167k0EmhqdkreV4xtA)，提取码：k170
+**2.onnx demo，onnx模型见[onnx模型](https://pan.baidu.com/s/1zfsQ167k0EmhqdkreV4xtA)，提取码：k170**
 
 ```
 python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec.onnx  --image_path imgs --output result_onnx
@@ -40,7 +39,7 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 
  结果保存在result_onnx 文件夹
 
-3.tensorrt 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
+**3.tensorrt 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)**
 
 ## **车牌检测训练**
 
@@ -94,7 +93,9 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 
 支持如下：
 
-**1.单行蓝牌**
+![Image 单行蓝牌](image/README/test_1.jpg)
+
+<!-- **1.单行蓝牌**
 ![Image 单行蓝牌](result/single_blue.jpg)
 
 **2.单行黄牌**
@@ -129,4 +130,4 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 
 **12.民航车牌**
 
-![Image text](result/minghang.jpg "民航车牌")
+![Image text](result/minghang.jpg "民航车牌") -->
