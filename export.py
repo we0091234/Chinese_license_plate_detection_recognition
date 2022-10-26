@@ -77,12 +77,19 @@ if __name__ == '__main__':
     model.fuse()  # only for ONNX
     input_names=['input']
     output_names=['output']
+    #tensorrt 7
+    # grid = model.model[-1].anchor_grid
+    # model.model[-1].anchor_grid = [a[..., :1, :1, :] for a in grid]
+    #tensorrt 7
+
     torch.onnx.export(model, img, f, verbose=False, opset_version=12, 
         input_names=input_names,
         output_names=output_names,
         dynamic_axes = {'input': {0: 'batch'},
                         'output': {0: 'batch'}
                         } if opt.dynamic else None)
+                        
+    # model.model[-1].anchor_grid = grid
 
     # Checks
     onnx_model = onnx.load(f)  # load onnx model

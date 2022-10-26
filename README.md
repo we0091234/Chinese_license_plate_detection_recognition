@@ -1,3 +1,7 @@
+```
+
+```
+
 <!-- <big>**史上最全车牌识别算法，支持11种中文车牌类型：**</big> -->
 
 # **最全车牌识别算法，支持11种中文车牌类型**
@@ -28,8 +32,15 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 测试文件夹imgs，结果保存再 result 文件夹中
 
+2.onnx demo，onnx模型见[onnx模型](https://pan.baidu.com/s/1zfsQ167k0EmhqdkreV4xtA)，提取码：k170
 
-2.tensorrt 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
+```
+python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec.onnx  --image_path imgs --output result_onnx
+```
+
+ 结果保存在result_onnx 文件夹
+
+3.tensorrt 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
 
 ## **车牌检测训练**
 
@@ -58,12 +69,14 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
    names: [ 'single','double']
 
    ```
-3. ```
+3. 训练
+
+   ```
    python3 train.py --data data/widerface.yaml --cfg models/yolov5n-0.5.yaml --weights weights/plate_detect.pt --epoch 250
    ```
 
    结果存在run文件夹中
-4. 检测模型  onnx export
+4. **检测模型  onnx export**
    检测模型导出onnx,需要安装onnx-sim  **[onnx-simplifier](https://github.com/daquexian/onnx-simplifier)**
 
    ```
