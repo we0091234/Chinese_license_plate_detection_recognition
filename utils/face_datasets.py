@@ -380,7 +380,16 @@ class LoadFaceImagesAndLabels(Dataset):  # for training/testing
                     labels[:, 11] = np.where(labels[:, 11] < 0, -1, 1 - labels[:, 11])
                     # labels[:, 13] = np.where(labels[:, 13] < 0, -1, 1 - labels[:, 13])
 
-                    #左右镜像的时候，左眼、右眼，　左嘴角、右嘴角无法区分, 应该交换位置，便于网络学习
+                    #左右镜像的时候，关键点应该交换位置，不然的话顺序就错了
+                    left_top = np.copy(labels[:, [5, 6]])
+                    left_bottom = np.copy(labels[:, [9, 10]])
+                    labels[:, [5, 6]] = labels[:, [7, 8]]
+                    labels[:, [7, 8]] = left_top
+                    labels[:, [9, 10]] = labels[:, [11, 12]]
+                    labels[:, [11, 12]] = left_bottom
+
+
+
                     # eye_left = np.copy(labels[:, [5, 6]])
                     # mouth_left = np.copy(labels[:, [11, 12]])
                     # labels[:, [5, 6]] = labels[:, [7, 8]]

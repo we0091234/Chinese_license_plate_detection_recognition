@@ -312,8 +312,8 @@ def draw_result(orgimg,dict_list):
         padding_w = 0.05*w
         padding_h = 0.11*h
         rect_area[0]=max(0,int(x-padding_w))
-        rect_area[1]=min(orgimg.shape[1],int(y-padding_h))
-        rect_area[2]=max(0,int(rect_area[2]+padding_w))
+        rect_area[1]=max(0,int(y-padding_h))
+        rect_area[2]=min(orgimg.shape[1],int(rect_area[2]+padding_w))
         rect_area[3]=min(orgimg.shape[0],int(rect_area[3]+padding_h))
 
         height_area = result['roi_height']
@@ -349,7 +349,7 @@ if __name__ == '__main__':
 
     detect_model = load_model(opt.detect_model, device)  #初始化检测模型
     plate_rec_model=init_model(device,opt.rec_model)      #初始化识别模型
-
+    time_b = time.time()
     if not os.path.isfile(opt.image_path):            #目录
         file_list=[]
         allFilePath(opt.image_path,file_list)
@@ -378,3 +378,4 @@ if __name__ == '__main__':
             img_name = os.path.basename(opt.image_path)
             save_img_path = os.path.join(save_path,img_name)
             cv2.imwrite(save_img_path,ori_img)  
+    print(f"elasted time is {time.time()-time_b} s")
