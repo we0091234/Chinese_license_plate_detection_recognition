@@ -27,7 +27,6 @@ def order_points(pts):
     # the second entry is the top-right, the third is the
     # bottom-right, and the fourth is the bottom-left
     rect = np.zeros((4, 2), dtype = "float32")
- 
     # the top-left point will have the smallest sum, whereas
     # the bottom-right point will have the largest sum
     s = pts.sum(axis = 1)
@@ -327,10 +326,6 @@ def draw_result(orgimg,dict_list):
             orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(255,0,0),height_area)
     print(result_str)
     return orgimg
-
-
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model', nargs='+', type=str, default='weights/plate_detect.pt', help='model.pt path(s)')  #检测模型
