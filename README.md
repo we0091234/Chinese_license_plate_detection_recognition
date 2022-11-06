@@ -81,7 +81,7 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 
     2.**tensorrt** 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
 
-    3.**openvino    版本2022.2**
+    3.**openvino demo**
 
 ```
  python openvino_infer.py --detect_model weights/plate_detect.onnx --rec_model weights/plate_rec.onnx --image_path imgs --output result_openvino
