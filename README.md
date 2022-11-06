@@ -73,15 +73,13 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 #### 部署
 
-1. **onnx demo**，onnx模型见[onnx模型](https://pan.baidu.com/s/1zfsQ167k0EmhqdkreV4xtA)，提取码：k170
+1.**onnx demo**，onnx模型见[onnx模型](https://pan.baidu.com/s/1zfsQ167k0EmhqdkreV4xtA)，提取码：k170
 
 ```
 python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec.onnx  --image_path imgs --output result_onnx
 ```
-
-    2.**tensorrt** 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
-
-    3.**openvino demo**
+2.**tensorrt** 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
+3.**openvino demo**
 
 ```
  python openvino_infer.py --detect_model weights/plate_detect.onnx --rec_model weights/plate_rec.onnx --image_path imgs --output result_openvino
