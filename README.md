@@ -69,18 +69,21 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 - [X] 双层农用车牌
 - [X] 民航车牌
 
-![Image 单行蓝牌](image/README/test_1.jpg)
+![Image ](image/README/test_1.jpg)
 
 #### 部署
 
-1.**onnx demo**，onnx模型见[onnx模型](https://pan.baidu.com/s/1zfsQ167k0EmhqdkreV4xtA)，提取码：k170
+1. [NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
+
+2.**onnx demo**，onnx模型见[onnx模型](https://pan.baidu.com/s/1zfsQ167k0EmhqdkreV4xtA)，提取码：k170
 
 ```
 python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec.onnx  --image_path imgs --output result_onnx
 ```
-2.**tensorrt** 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
 
-3.**openvino demo** 版本2022.2
+3.**tensorrt** 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
+
+4.**openvino demo** 版本2022.2
 
 ```
  python openvino_infer.py --detect_model weights/plate_detect.onnx --rec_model weights/plate_rec.onnx --image_path imgs --output result_openvino
