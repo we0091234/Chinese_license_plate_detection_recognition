@@ -328,17 +328,6 @@ def draw_result(orgimg,dict_list):
             orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
     print(result_str)
     return orgimg
-
-
-
-def get_second(capture):
-    if capture.isOpened():
-        rate = capture.get(5)   # 帧速率
-        FrameNumber = capture.get(7)  # 视频文件的帧数
-        duration = FrameNumber/rate  # 帧速率/视频总帧数 是时间，除以60之后单位是分钟
-        return int(rate),int(FrameNumber),int(duration)    
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model', nargs='+', type=str, default='weights/plate_detect.pt', help='model.pt path(s)')  #检测模型
@@ -346,7 +335,6 @@ if __name__ == '__main__':
     parser.add_argument('--image_path', type=str, default='imgs', help='source') 
     parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--output', type=str, default='result1', help='source') 
-    parser.add_argument('--video', type=str, default='', help='source') 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # device =torch.device("cpu")
     opt = parser.parse_args()
@@ -360,93 +348,39 @@ if __name__ == '__main__':
     plate_rec_model=init_model(device,opt.rec_model)      #初始化识别模型
     time_all = 0
     time_begin=time.time()
-    if not opt.video:     #处理图片
-        if not os.path.isfile(opt.image_path):            #目录
-            file_list=[]
-            allFilePath(opt.image_path,file_list)
-            for img_path in file_list:
-                
-                print(count,img_path,end=" ")
-                time_b = time.time()
-                img =cv_imread(img_path)
-                
-                if img is None:
-                    continue
-                if img.shape[-1]==4:
-                    img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
-                # detect_one(model,img_path,device)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
-                ori_img=draw_result(img,dict_list)
-                img_name = os.path.basename(img_path)
-                save_img_path = os.path.join(save_path,img_name)
-                time_e=time.time()
-                time_gap = time_e-time_b
-                if count:
-                    time_all+=time_gap
-                cv2.imwrite(save_img_path,ori_img)
-                count+=1
-        else:                                          #单个图片
-                print(count,opt.image_path,end=" ")
-                img =cv_imread(opt.image_path)
-                if img.shape[-1]==4:
-                    img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
-                # detect_one(model,img_path,device)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
-                ori_img=draw_result(img,dict_list)
-                img_name = os.path.basename(opt.image_path)
-                save_img_path = os.path.join(save_path,img_name)
-                cv2.imwrite(save_img_path,ori_img)  
-        print(f"sumTime time is {time.time()-time_begin} s, average pic time is {time_all/(len(file_list)-1)}")
-        
-    else:    #处理视频
-        video_name = opt.video
-        capture=cv2.VideoCapture(video_name)
-        fourcc = cv2.VideoWriter_fourcc(*'MP4V') 
-        fps = capture.get(cv2.CAP_PROP_FPS)  # 帧数
-        width, height = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH)), int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))  # 宽高
-        out = cv2.VideoWriter('result.mp4', fourcc, fps, (width, height))  # 写入视频
-        frame_count = 0
-        fps_all=0
-        rate,FrameNumber,duration=get_second(capture)
-        if capture.isOpened():
-            while True:
-                t1 = cv2.getTickCount()
-                frame_count+=1
-                print(f"第{frame_count} 帧",end=" ")
-                ret,img=capture.read()
-                if not ret:
-                    break
-                # if frame_count%rate==0:
-                img0 = copy.deepcopy(img)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
-                ori_img=draw_result(img,dict_list)
-                t2 =cv2.getTickCount()
-                infer_time =(t2-t1)/cv2.getTickFrequency()
-                fps=1.0/infer_time
-                fps_all+=fps
-                str_fps = f'fps:{fps:.4f}'
-                
-                cv2.putText(ori_img,str_fps,(20,20),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
-                cv2.imshow("haha",ori_img)
-                cv2.waitKey(1)
-                out.write(ori_img)
-
-                # current_time = int(frame_count/FrameNumber*duration)
-                # sec = current_time%60
-                # minute = current_time//60
-                # for result_ in result_list:
-                #     plate_no = result_['plate_no']
-                #     if not is_car_number(pattern_str,plate_no):
-                #         continue
-                #     print(f'车牌号:{plate_no},时间:{minute}分{sec}秒')
-                #     time_str =f'{minute}分{sec}秒'
-                #     writer.writerow({"车牌":plate_no,"时间":time_str})
-                # out.write(ori_img)
-                
-                
-        else:
-            print("失败")
-        capture.release()
-        out.release()
-        cv2.destroyAllWindows()
-        print(f"all frame is {frame_count},average fps is {fps_all/frame_count} fps")
+    if not os.path.isfile(opt.image_path):            #目录
+        file_list=[]
+        allFilePath(opt.image_path,file_list)
+        for img_path in file_list:
+            
+            print(count,img_path,end=" ")
+            time_b = time.time()
+            img =cv_imread(img_path)
+            
+            if img is None:
+                continue
+            if img.shape[-1]==4:
+                img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
+            # detect_one(model,img_path,device)
+            dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
+            ori_img=draw_result(img,dict_list)
+            img_name = os.path.basename(img_path)
+            save_img_path = os.path.join(save_path,img_name)
+            time_e=time.time()
+            time_gap = time_e-time_b
+            if count:
+                time_all+=time_gap
+            cv2.imwrite(save_img_path,ori_img)
+            count+=1
+    else:                                          #单个图片
+            print(count,opt.image_path,end=" ")
+            img =cv_imread(opt.image_path)
+            if img.shape[-1]==4:
+                img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
+            # detect_one(model,img_path,device)
+            dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
+            ori_img=draw_result(img,dict_list)
+            img_name = os.path.basename(opt.image_path)
+            save_img_path = os.path.join(save_path,img_name)
+            cv2.imwrite(save_img_path,ori_img)  
+    print(f"sumTime time is {time.time()-time_begin} s, average pic time is {time_all/(len(file_list)-1)}")

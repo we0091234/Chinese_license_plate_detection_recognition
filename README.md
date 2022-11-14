@@ -2,13 +2,21 @@
 
 **环境要求: python >=3.6  pytorch >=1.7**
 
-#### **运行demo:**
+#### **图片测试demo:**
 
 ```
 python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weights/plate_rec.pth --image_path imgs --output result
 ```
 
 测试文件夹imgs，结果保存再 result 文件夹中
+
+#### 视频测试demo  [2.MP4](https://pan.baidu.com/s/1O1sT8hCEwJZmVScDwBHgOg)  提取码：41aq
+
+```
+python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weights/plate_rec.pth --video 2.mp4
+```
+
+视频文件为2.mp4  保存为result.mp4
 
 #### **车牌检测训练**
 
@@ -76,6 +84,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 1. **NCNN** [NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
 
 2.**onnx demo**，onnx模型见[onnx模型](https://pan.baidu.com/s/1zfsQ167k0EmhqdkreV4xtA)，提取码：k170
+
 ```
 python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec.onnx  --image_path imgs --output result_onnx
 ```
