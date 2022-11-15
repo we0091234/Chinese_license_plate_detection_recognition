@@ -1,3 +1,7 @@
+## What's New
+
+**安卓 NCNN 支持** : [NCNN 安卓](https://github.com/Ayers-github/Chinese-License-Plate-Recognition/tree/Ayers-github/Chinese-License-Plate-Recognition-ncnn-android)
+
 ## **最全车牌识别算法，支持12种中文车牌类型**
 
 **环境要求: python >=3.6  pytorch >=1.7**
