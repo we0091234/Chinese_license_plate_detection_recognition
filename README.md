@@ -25,7 +25,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 #### **车牌检测**
 
 
-1. **下载数据集：**  [datasets](https://pan.baidu.com/s/1dCTzlbHMlo9l83LndJarwg) 提取码：sq2m     数据从CCPD和CRPD数据集中选取并转换的
+1. **下载数据集：**  [datasets](https://pan.baidu.com/s/1xa6zvOGjU02j8_lqHGVf0A) 提取码：pi6c     数据从CCPD和CRPD数据集中选取并转换的
    数据集格式为yolo格式：
 
    ```
