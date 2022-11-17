@@ -22,7 +22,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 视频文件为2.mp4  保存为result.mp4
 
-#### **车牌检测**
+#### **车牌检测训练**
 
 
 1. **下载数据集：**  [datasets](https://pan.baidu.com/s/1xa6zvOGjU02j8_lqHGVf0A) 提取码：pi6c     数据从CCPD和CRPD数据集中选取并转换的
@@ -61,6 +61,10 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
    2. onnxsim weights/plate_detect.onnx weights/plate_detect.onnx
    ```
 
+   **训练好的模型进行检测**
+   ```
+   python detect_demo.py  --detect_model weights/plate_detect.pt
+   ```
 #### **车牌识别训练**
 
 车牌识别训练链接如下：
