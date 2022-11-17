@@ -19,6 +19,7 @@ from utils.cv_puttext import cv2ImgAddText
 from plate_recognition.plate_rec import get_plate_result,allFilePath,init_model,cv_imread
 # from plate_recognition.plate_cls import cv_imread
 from plate_recognition.double_plate_split_merge import get_split_merge
+from plate_recognition.color_rec import plate_color_rec,init_color_model
 
 clors = [(255,0,0),(0,255,0),(0,0,255),(255,255,0),(0,255,255)]
 def order_points(pts):
@@ -146,7 +147,7 @@ def show_results(img, xyxy, conf, landmarks, class_num):
     cv2.putText(img, label, (x1, y1 - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
     return img
 
-def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_rec_model):
+def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_rec_model,plate_color_model=None):
     h,w,c = img.shape
     result_dict={}
     tl = 1 or round(0.002 * (h + w) / 2) + 1  # line/font thickness
@@ -165,19 +166,22 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
 
     class_label= int(class_num)  #车牌的的类型0代表单牌，1代表双层车牌
     roi_img = four_point_transform(img,landmarks_np)   #透视变换得到车牌小图
+    color_code = plate_color_rec(roi_img,plate_color_model,device) #车牌颜色识别
     if class_label:        #判断是否是双层车牌，是双牌的话进行分割后然后拼接
         roi_img=get_split_merge(roi_img)
     plate_number = get_plate_result(roi_img,device,plate_rec_model)                 #对车牌小图进行识别
     # cv2.imwrite("roi.jpg",roi_img)
-    result_dict['rect']=rect
-    result_dict['landmarks']=landmarks_np.tolist()
-    result_dict['plate_no']=plate_number
-    result_dict['roi_height']=roi_img.shape[0]
+    result_dict['rect']=rect                      #车牌roi区域
+    result_dict['landmarks']=landmarks_np.tolist() #车牌角坐标
+    result_dict['plate_no']=plate_number   #车牌号
+    result_dict['roi_height']=roi_img.shape[0]  #车牌高度
+    result_dict['plate_color']=color_code   #车牌颜色
+    result_dict['plate_type']=class_label   #单双层 0单层 1双层
     return result_dict
 
 
 
-def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size):
+def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,plate_color_model=None):
     # Load model
     # img_size = opt_img_size
     conf_thres = 0.3
@@ -237,7 +241,7 @@ def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size):
                 conf = det[j, 4].cpu().numpy()
                 landmarks = det[j, 5:13].view(-1).tolist()
                 class_num = det[j, 13].cpu().numpy()
-                result_dict = get_plate_rec_landmark(orgimg, xyxy, conf, landmarks, class_num,device,plate_rec_model)
+                result_dict = get_plate_rec_landmark(orgimg, xyxy, conf, landmarks, class_num,device,plate_rec_model,plate_color_model)
                 dict_list.append(result_dict)
     return dict_list
     # cv2.imwrite('result.jpg', orgimg)
@@ -319,13 +323,17 @@ def draw_result(orgimg,dict_list):
 
         height_area = result['roi_height']
         landmarks=result['landmarks']
-        result = result['plate_no']
-        result_str+=result+" "
+        result_p = result['plate_no']
+        if result['plate_type']==0:
+            result_p+=" "+result['plate_color']
+        else:
+            result_p+=" "+result['plate_color']+"双层"
+        result_str+=result_p+" "
         for i in range(4):  #关键点
             cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
         cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,0,255),2) #画框
         if len(result)>=1:
-            orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
+            orgimg=cv2ImgAddText(orgimg,result_p,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
     print(result_str)
     return orgimg
 
@@ -343,6 +351,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model', nargs='+', type=str, default='weights/plate_detect.pt', help='model.pt path(s)')  #检测模型
     parser.add_argument('--rec_model', type=str, default='weights/plate_rec.pth', help='model.pt path(s)')#识别模型
+    parser.add_argument('--color_model',type=str,default='weights/color_classify.pth',help='plate color')#颜色识别模型
     parser.add_argument('--image_path', type=str, default='imgs', help='source') 
     parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--output', type=str, default='result1', help='source') 
@@ -358,6 +367,7 @@ if __name__ == '__main__':
 
     detect_model = load_model(opt.detect_model, device)  #初始化检测模型
     plate_rec_model=init_model(device,opt.rec_model)      #初始化识别模型
+    plate_color_model =init_color_model(opt.color_model,device)
     time_all = 0
     time_begin=time.time()
     if not opt.video:     #处理图片
@@ -375,7 +385,7 @@ if __name__ == '__main__':
                 if img.shape[-1]==4:
                     img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
                 # detect_one(model,img_path,device)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
+                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,plate_color_model)
                 ori_img=draw_result(img,dict_list)
                 img_name = os.path.basename(img_path)
                 save_img_path = os.path.join(save_path,img_name)
@@ -418,7 +428,7 @@ if __name__ == '__main__':
                     break
                 # if frame_count%rate==0:
                 img0 = copy.deepcopy(img)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
+                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,plate_color_model)
                 ori_img=draw_result(img,dict_list)
                 t2 =cv2.getTickCount()
                 infer_time =(t2-t1)/cv2.getTickFrequency()

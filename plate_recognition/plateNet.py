@@ -95,6 +95,31 @@ class myNet(nn.Module):
         x = x.view(x.size(0), -1)
         y = self.classifier(x)
         return y
+    
+    
+class MyNet_color(nn.Module):
+    def __init__(self, class_num=6):
+        super(MyNet_color, self).__init__()
+        self.class_num = class_num
+        self.backbone = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=16, kernel_size=(5, 5), stride=(1, 1)),  # 0
+            torch.nn.BatchNorm2d(16),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(2, 2)),
+            nn.Dropout(0),
+            nn.Flatten(),
+            nn.Linear(480, 64),
+            nn.Dropout(0),
+            nn.ReLU(),
+            nn.Linear(64, class_num),
+            nn.Dropout(0),
+            nn.Softmax(1)
+        )
+
+    def forward(self, x):
+        logits = self.backbone(x)
+
+        return logits
 
 if __name__ == '__main__':
     x = torch.randn(1,3,48,168)
