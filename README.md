@@ -22,9 +22,10 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 视频文件为2.mp4  保存为result.mp4
 
-#### **车牌检测训练**
+#### **车牌检测**
 
-1. **下载数据集：**  [datasets](https://pan.baidu.com/s/1xCYunxRoT3Xv8TeE2t1kPQ) 提取码：trbl     数据从CCPD和CRPD数据集中选取并转换的
+
+1. **下载数据集：**  [datasets](https://pan.baidu.com/s/1dCTzlbHMlo9l83LndJarwg) 提取码：sq2m     数据从CCPD和CRPD数据集中选取并转换的
    数据集格式为yolo格式：
 
    ```

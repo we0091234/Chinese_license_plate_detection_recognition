@@ -172,7 +172,7 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
     plate_number = get_plate_result(roi_img,device,plate_rec_model)                 #对车牌小图进行识别
     # cv2.imwrite("roi.jpg",roi_img)
     result_dict['rect']=rect                      #车牌roi区域
-    result_dict['landmarks']=landmarks_np.tolist() #车牌角坐标
+    result_dict['landmarks']=landmarks_np.tolist() #车牌角点坐标
     result_dict['plate_no']=plate_number   #车牌号
     result_dict['roi_height']=roi_img.shape[0]  #车牌高度
     result_dict['plate_color']=color_code   #车牌颜色
