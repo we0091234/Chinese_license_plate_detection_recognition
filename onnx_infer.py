@@ -35,7 +35,10 @@ def get_plate_result(img,session_rec): #识别后处理
     img =rec_pre_precessing(img)
     y_onnx = session_rec.run([session_rec.get_outputs()[0].name], {session_rec.get_inputs()[0].name: img})[0]
     # print(y_onnx[0])
-    plate_no = decodePlate(y_onnx[0])
+    index =np.argmax(y_onnx[0],axis=1)  #找出概率最大的那个字符的序号
+    # print(y_onnx[0])
+    plate_no = decodePlate(index)
+    # plate_no = decodePlate(y_onnx[0])
     return plate_no
 
 

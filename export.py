@@ -69,6 +69,18 @@ if __name__ == '__main__':
             for i in range(len(m.branch2)):
                 if isinstance(m.branch2[i], nn.SiLU):
                     m.branch2[i] = SiLU()
+        if isinstance(m, models.common.BlazeBlock):#shufflenet block nn.SiLU
+            if isinstance(m.relu, nn.SiLU):
+                m.relu = SiLU()
+        if isinstance(m, models.common.DoubleBlazeBlock):#shufflenet block nn.SiLU
+            if isinstance(m.relu, nn.SiLU):
+                m.relu = SiLU()
+            for i in range(len(m.branch1)):
+                if isinstance(m.branch1[i], nn.SiLU):
+                    m.branch1[i] = SiLU()
+            # for i in range(len(m.branch2)):
+            #     if isinstance(m.branch2[i], nn.SiLU):
+            #         m.branch2[i] = SiLU()
     y = model(img)  # dry run
 
     # ONNX export

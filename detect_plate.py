@@ -367,6 +367,11 @@ if __name__ == '__main__':
 
     detect_model = load_model(opt.detect_model, device)  #初始化检测模型
     plate_rec_model=init_model(device,opt.rec_model)      #初始化识别模型
+    #算参数量
+    total = sum(p.numel() for p in detect_model.parameters())
+    total_1 = sum(p.numel() for p in plate_rec_model.parameters())
+    print("detect params: %.2fM,rec params: %.2fM" % (total/1e6,total_1/1e6))
+    
     plate_color_model =init_color_model(opt.color_model,device)
     time_all = 0
     time_begin=time.time()
@@ -437,8 +442,8 @@ if __name__ == '__main__':
                 str_fps = f'fps:{fps:.4f}'
                 
                 cv2.putText(ori_img,str_fps,(20,20),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
-                cv2.imshow("haha",ori_img)
-                cv2.waitKey(1)
+                # cv2.imshow("haha",ori_img)
+                # cv2.waitKey(1)
                 out.write(ori_img)
 
                 # current_time = int(frame_count/FrameNumber*duration)

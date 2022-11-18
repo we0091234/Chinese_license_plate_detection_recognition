@@ -48,6 +48,7 @@ def image_processing(img,device):
 def get_plate_result(img,device,model):
     input = image_processing(img,device)
     preds = model(input)
+    # preds =preds.argmax(dim=2) #找出概率最大的那个字符
     # print(preds)
     preds=preds.view(-1).detach().cpu().numpy()
     newPreds=decodePlate(preds)

@@ -57,8 +57,8 @@ def get_plate_result(img,rec_model,rec_output):
     # time_b = time.time()
     res_onnx = rec_model([img])[rec_output]
     # time_e= time.time()
-    # print(y_onnx[0])
-    plate_no = decodePlate(res_onnx)
+    index =np.argmax(res_onnx,axis=-1)  #找出最大概率的那个字符的序号
+    plate_no = decodePlate(index)
     # print(f'{plate_no},time is {time_e-time_b}')
     return plate_no
 
