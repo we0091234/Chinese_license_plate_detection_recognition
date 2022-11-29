@@ -1,9 +1,11 @@
 ## What's New
+**2022.11.29 支持危险品车牌**
 
 **2022.11.17 支持车牌颜色**
+
 **2022.11.14 安卓 NCNN 支持** : [NCNN 安卓](https://github.com/Ayers-github/Chinese-License-Plate-Recognition/tree/Ayers-github/Chinese-License-Plate-Recognition-ncnn-android)
 
-## **最全车牌识别算法，支持13种中文车牌类型**
+## **最全车牌识别算法，支持14种中文车牌类型**
 
 **环境要求: python >=3.6  pytorch >=1.7**
 
@@ -88,6 +90,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 - [X] 11.双层农用车牌
 - [X] 12.民航车牌
 - [X] 13.摩托车牌
+- [X] 14.危险品车牌
 
 ![Image ](image/README/test_1.jpg)
 

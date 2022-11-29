@@ -22,7 +22,8 @@ from plate_recognition.double_plate_split_merge import get_split_merge
 from plate_recognition.color_rec import plate_color_rec,init_color_model
 
 clors = [(255,0,0),(0,255,0),(0,0,255),(255,255,0),(0,255,255)]
-def order_points(pts):
+danger=['危','险']
+def order_points(pts):                   #四个点安好左上 右上 右下 左下排列
     # initialzie a list of coordinates that will be ordered
     # such that the first entry in the list is the top-left,
     # the second entry is the top-right, the third is the
@@ -45,7 +46,7 @@ def order_points(pts):
     return rect
 
 
-def four_point_transform(image, pts):
+def four_point_transform(image, pts):                       #透视变换得到车牌小图
     # obtain a consistent order of the points and unpack them
     # individually
     rect = order_points(pts)
@@ -91,7 +92,7 @@ def load_model(weights, device):
     return model
 
 
-def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):
+def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):  #返回到原图坐标
     # Rescale coords (xyxy) from img1_shape to img0_shape
     if ratio_pad is None:  # calculate from img0_shape
         gain = min(img1_shape[0] / img0_shape[0], img1_shape[1] / img0_shape[1])  # gain  = old / new
@@ -117,36 +118,6 @@ def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):
     return coords
 
 
-def show_results(img, xyxy, conf, landmarks, class_num):
-    h,w,c = img.shape
-    tl = 1 or round(0.002 * (h + w) / 2) + 1  # line/font thickness
-    x1 = int(xyxy[0])
-    y1 = int(xyxy[1])
-    x2 = int(xyxy[2])
-    y2 = int(xyxy[3])
-    cv2.rectangle(img, (x1,y1), (x2, y2), (0,255,0), thickness=tl, lineType=cv2.LINE_AA)
-
-    clors = [(255,0,0),(0,255,0),(0,0,255),(255,255,0),(0,255,255)]
-    landmarks_np=np.zeros((5,2))
-
-    for i in range(4):
-        point_x = int(landmarks[2 * i])
-        point_y = int(landmarks[2 * i + 1])
-        # cv2.circle(img, (point_x, point_y), 2, clors[i], -1)
-        landmarks_np[i]=np.array([point_x,point_y])
-    rect = order_points(landmarks_np)
-    for i in range(4):
-        point_x = int(rect[i][0])
-        point_y = int(rect[i][1])
-        cv2.circle(img, (point_x, point_y), 2, clors[i], -1)
-
-    roi_img = four_point_transform(img,landmarks_np)
-    # cv2.imwrite("roi.jpg",roi_img)
-    tf = max(tl - 1, 1)  # font thickness
-    label = str(conf)[:5]
-    cv2.putText(img, label, (x1, y1 - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
-    return img
-
 def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_rec_model,plate_color_model=None):
     h,w,c = img.shape
     result_dict={}
@@ -170,6 +141,9 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
     if class_label:        #判断是否是双层车牌，是双牌的话进行分割后然后拼接
         roi_img=get_split_merge(roi_img)
     plate_number = get_plate_result(roi_img,device,plate_rec_model)                 #对车牌小图进行识别
+    for dan in danger:                                                           #只要出现‘危’或者‘险’就是危险品车牌
+        if dan in plate_number:
+            plate_number='危险品'
     # cv2.imwrite("roi.jpg",roi_img)
     result_dict['rect']=rect                      #车牌roi区域
     result_dict['landmarks']=landmarks_np.tolist() #车牌角点坐标
@@ -246,68 +220,6 @@ def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,plat
     return dict_list
     # cv2.imwrite('result.jpg', orgimg)
 
-def detect_one(model, image_path, device):
-    # Load model
-    img_size = 640
-    conf_thres = 0.3
-    iou_thres = 0.5
-    dict_list=[]
-    orgimg = cv2.imread(image_path)  # BGR
-    img0 = copy.deepcopy(orgimg)
-    assert orgimg is not None, 'Image Not Found ' + image_path
-    h0, w0 = orgimg.shape[:2]  # orig hw
-    r = img_size / max(h0, w0)  # resize image to img_size
-    if r != 1:  # always resize down, only resize up if training with augmentation
-        interp = cv2.INTER_AREA if r < 1  else cv2.INTER_LINEAR
-        img0 = cv2.resize(img0, (int(w0 * r), int(h0 * r)), interpolation=interp)
-
-    imgsz = check_img_size(img_size, s=model.stride.max())  # check img_size
-
-    img = letterbox(img0, new_shape=imgsz)[0]
-    # img =process_data(img0)
-    # Convert
-    img = img[:, :, ::-1].transpose(2, 0, 1).copy()  # BGR to RGB, to 3x416x416
-
-    # Run inference
-    t0 = time.time()
-
-    img = torch.from_numpy(img).to(device)
-    img = img.float()  # uint8 to fp16/32
-    img /= 255.0  # 0 - 255 to 0.0 - 1.0
-    if img.ndimension() == 3:
-        img = img.unsqueeze(0)
-
-    # Inference
-    # t1 = time_synchronized()
-    pred = model(img)[0]
-
-    # Apply NMS
-    pred = non_max_suppression_face(pred, conf_thres, iou_thres)
-
-    print('img.shape: ', img.shape)
-    print('orgimg.shape: ', orgimg.shape)
-
-    # Process detections
-    for i, det in enumerate(pred):  # detections per image
-        if len(det):
-            # Rescale boxes from img_size to im0 size
-            det[:, :4] = scale_coords(img.shape[2:], det[:, :4], orgimg.shape).round()
-
-            # Print results
-            for c in det[:, -1].unique():
-                n = (det[:, -1] == c).sum()  # detections per class
-
-            det[:, 5:13] = scale_coords_landmarks(img.shape[2:], det[:, 5:13], orgimg.shape).round()
-
-            for j in range(det.size()[0]):
-                xyxy = det[j, :4].view(-1).tolist()
-                conf = det[j, 4].cpu().numpy()
-                landmarks = det[j, 5:13].view(-1).tolist()
-                class_num = det[j, 13].cpu().numpy()
-                img = show_results(orgimg, xyxy, conf, landmarks, class_num)
-                # dict_list.append(result_dict)
-    cv2.imwrite('result.jpg', orgimg)
-
 def draw_result(orgimg,dict_list):
     result_str =""
     for result in dict_list:
@@ -324,16 +236,20 @@ def draw_result(orgimg,dict_list):
         height_area = result['roi_height']
         landmarks=result['landmarks']
         result_p = result['plate_no']
-        if result['plate_type']==0:
+        if result['plate_type']==0:#单层
             result_p+=" "+result['plate_color']
-        else:
+        else:                             #双层
             result_p+=" "+result['plate_color']+"双层"
         result_str+=result_p+" "
         for i in range(4):  #关键点
             cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
         cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,0,255),2) #画框
         if len(result)>=1:
-            orgimg=cv2ImgAddText(orgimg,result_p,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
+            if "危险品" in result_p: #如果是危险品车牌，文字就画在下面
+                orgimg=cv2ImgAddText(orgimg,result_p,rect_area[0],rect_area[3],(0,255,0),height_area)
+            else:
+                orgimg=cv2ImgAddText(orgimg,result_p,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
+               
     print(result_str)
     return orgimg
 

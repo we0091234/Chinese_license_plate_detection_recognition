@@ -48,7 +48,7 @@ def init_color_model(model_path,device):
 
 
 def plate_color_rec(img,model,device):
-    class_name = ['黑色', '蓝色', '危险品', '绿色', '白色', '黄色']
+    class_name = ['黑色', '蓝色', '', '绿色', '白色', '黄色']
     data_input = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     image = cv2.resize(data_input, (34, 9))
     image = np.transpose(image, (2, 0, 1))

@@ -170,6 +170,7 @@ def rec_plate(outputs,img0,session_rec):  #识别车牌
         land_marks = output[5:13].reshape(4,2)
         roi_img = four_point_transform(img0,land_marks)
         label = int(output[-1])
+        score = output[4]
         if label==1:  #代表是双层车牌
             roi_img = get_split_merge(roi_img)
         plate_no = get_plate_result(roi_img,session_rec)
