@@ -22,7 +22,7 @@ def allFilePath(rootPath,allFIleList):
             allFilePath(os.path.join(rootPath,temp),allFIleList)
 
 mean_value,std_value=((0.588,0.193))#识别模型均值标准差
-plateName=r"#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民航深0123456789ABCDEFGHJKLMNPQRSTUVWXYZ"
+plateName=r"#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民航危0123456789ABCDEFGHJKLMNPQRSTUVWXYZ险品"
 
 def rec_pre_precessing(img,size=(48,168)): #识别前处理
     img =cv2.resize(img,(168,48))
