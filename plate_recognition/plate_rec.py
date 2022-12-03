@@ -66,7 +66,7 @@ def init_model(device,model_path):
     model_state=check_point['state_dict']
     cfg=check_point['cfg']
     model_path = os.sep.join([sys.path[0],model_path])
-    model = myNet_ocr(num_classes=78,export=True,cfg=cfg)
+    model = myNet_ocr(num_classes=len(plateName),export=True,cfg=cfg)
    
     model.load_state_dict(model_state)
     model.to(device)

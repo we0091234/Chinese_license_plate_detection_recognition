@@ -35,7 +35,7 @@ from utils.plots import plot_images, plot_labels, plot_results, plot_evolution
 from utils.torch_utils import ModelEMA, select_device, intersect_dicts, torch_distributed_zero_first
 
 logger = logging.getLogger(__name__)
-begin_save=3
+begin_save=1
 try:
     import wandb
 except ImportError:
@@ -153,7 +153,7 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
                 file.write(ckpt['training_results'])  # write results.txt
 
         # Epochs
-        #start_epoch = ckpt['epoch'] + 1
+        # start_epoch = ckpt['epoch'] + 1
         if opt.resume:
             assert start_epoch > 0, '%s training to %g epochs is finished, nothing to resume.' % (weights, epochs)
         if epochs < start_epoch:
@@ -380,7 +380,15 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
                 # Save last, best and delete
                 torch.save(ckpt, last)
                 if best_fitness == fi:
-                    torch.save(ckpt, best)
+                    ckpt_best = {
+                            'epoch': epoch,
+                            'best_fitness': best_fitness,
+                            # 'training_results': f.read(),
+                            'model': ema.ema,
+                            # 'optimizer': None if final_epoch else optimizer.state_dict(),
+                            # 'wandb_id': wandb_run.id if wandb else None
+                            }
+                    torch.save(ckpt_best, best)
                 del ckpt
         # end epoch ----------------------------------------------------------------------------------------------------
     # end training

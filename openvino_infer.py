@@ -16,8 +16,8 @@ def allFilePath(rootPath,allFIleList):
     fileList = os.listdir(rootPath)
     for temp in fileList:
         if os.path.isfile(os.path.join(rootPath,temp)):
-            if temp.endswith("jpg"):
-                allFIleList.append(os.path.join(rootPath,temp))
+            # if temp.endswith("jpg"):
+            allFIleList.append(os.path.join(rootPath,temp))
         else:
             allFilePath(os.path.join(rootPath,temp),allFIleList)
 

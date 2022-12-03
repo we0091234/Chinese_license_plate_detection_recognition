@@ -25,3 +25,4 @@ mytest/
 !*.npy
 !*.pth
 !*.png
+!*.yaml

@@ -14,7 +14,7 @@ class myNet_ocr(nn.Module):
         # self.loc =  nn.MaxPool2d((2, 2), (5, 1), (0, 1),ceil_mode=True)
         # self.loc =  nn.AvgPool2d((2, 2), (5, 2), (0, 1),ceil_mode=False)
         self.loc =  nn.MaxPool2d((5, 2), (1, 1),(0,1),ceil_mode=False)
-        self.newCnn=nn.Conv2d(256,num_classes,1,1)
+        self.newCnn=nn.Conv2d(cfg[-1],num_classes,1,1)
         # self.newBn=nn.BatchNorm2d(num_classes)
     def make_layers(self, cfg, batch_norm=False):
         layers = []
@@ -122,7 +122,7 @@ class MyNet_color(nn.Module):
         return logits
 
 if __name__ == '__main__':
-    x = torch.randn(1,3,48,168)
+    x = torch.randn(1,3,48,216)
     model = myNet_ocr(num_classes=78,export=True)
     out = model(x)
     print(out.shape)
