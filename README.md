@@ -1,4 +1,5 @@
 ## What's New
+
 **2022.11.29 支持危险品车牌**
 
 **2022.11.17 支持车牌颜色**
@@ -25,7 +26,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 视频文件为2.mp4  保存为result.mp4
 
-#### **车牌检测训练**
+## **车牌检测训练**
 
 1. **下载数据集：**  [datasets](https://pan.baidu.com/s/1xa6zvOGjU02j8_lqHGVf0A) 提取码：pi6c     数据从CCPD和CRPD数据集中选取并转换的
    数据集格式为yolo格式：
@@ -69,7 +70,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
    python detect_demo.py  --detect_model weights/plate_detect.pt
    ```
 
-#### **车牌识别训练**
+## **车牌识别训练**
 
 车牌识别训练链接如下：
 
@@ -94,7 +95,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 ![Image ](image/README/test_1.jpg)
 
-#### 部署
+## 部署
 
 1. **NCNN** [NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
 
@@ -112,11 +113,11 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
  python openvino_infer.py --detect_model weights/plate_detect.onnx --rec_model weights/plate_rec.onnx --image_path imgs --output result_openvino
 ```
 
-#### References
+## References
 
 * [https://github.com/deepcam-cn/yolov5-face](https://github.com/deepcam-cn/yolov5-face)
 * [https://github.com/meijieru/crnn.pytorch](https://github.com/meijieru/crnn.pytorch)
 
-#### 联系
+## 联系
 
 **有问题可以提issues 或者加qq群:871797331 询问**
