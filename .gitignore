@@ -10,6 +10,7 @@ runs/
 build/
 result1/
 mytest/
+mytest_double/
 *.pyc
 # 不忽略下面指定的文件类型
 !*.cpp
