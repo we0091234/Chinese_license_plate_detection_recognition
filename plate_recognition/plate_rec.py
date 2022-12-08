@@ -25,11 +25,13 @@ mean_value,std_value=(0.588,0.193)
 def decodePlate(preds):
     pre=0
     newPreds=[]
+    index=[]
     for i in range(len(preds)):
         if preds[i]!=0 and preds[i]!=pre:
             newPreds.append(preds[i])
+            index.append(i)
         pre=preds[i]
-    return newPreds
+    return newPreds,index
 
 def image_processing(img,device):
     img = cv2.resize(img, (168,48))
@@ -48,16 +50,22 @@ def image_processing(img,device):
 def get_plate_result(img,device,model):
     input = image_processing(img,device)
     preds = model(input)
-    # preds =preds.argmax(dim=2) #找出概率最大的那个字符
-    # print(preds)
-    preds=preds.view(-1).detach().cpu().numpy()
-    newPreds=decodePlate(preds)
+    preds=torch.softmax(preds,dim=-1)
+    prob,index=preds.max(dim=-1)
+    
+    index = index.view(-1).detach().cpu().numpy()
+    prob=prob.view(-1).detach().cpu().numpy()
+    
+    
+    # preds=preds.view(-1).detach().cpu().numpy()
+    newPreds,new_index=decodePlate(index)
+    prob=prob[new_index]
     plate=""
     for i in newPreds:
         plate+=plateName[i]
     # if not (plate[0] in plateName[1:44] ):
     #     return ""
-    return plate
+    return plate,prob    #返回车牌号以及每个字符的概率
 
 def init_model(device,model_path):
     # print( print(sys.path))

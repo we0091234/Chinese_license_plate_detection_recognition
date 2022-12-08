@@ -47,7 +47,7 @@ class myNet_ocr(nn.Module):
         if self.export:
             conv = x.squeeze(2) # b *512 * width
             conv = conv.transpose(2,1)  # [w, b, c]
-            conv =conv.argmax(dim=2)
+            # conv =conv.argmax(dim=2)
             return conv
         else:
             b, c, h, w = x.size()
