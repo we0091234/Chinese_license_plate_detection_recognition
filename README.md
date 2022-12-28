@@ -2,11 +2,7 @@
 
 **2022.12.04 车辆和车牌一起检测看这里[车辆系统](https://github.com/we0091234/Car_recognition)**
 
-**2022.11.29 支持危险品车牌**
-
-**2022.11.17 支持车牌颜色**
-
-**2022.11.14 安卓 NCNN 支持** : [NCNN 安卓](https://github.com/Ayers-github/Chinese-License-Plate-Recognition/tree/Ayers-github/Chinese-License-Plate-Recognition-ncnn-android)
+[yolov7 车牌检测+识别](https://github.com/we0091234/yolov7_plate)
 
 ## **最全车牌识别算法，支持14种中文车牌类型**
 
