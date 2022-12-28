@@ -82,7 +82,7 @@ def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):  #�
     return coords
 
 
-def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_rec_model,plate_color_model=None):
+def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_rec_model,is_color=False):
     h,w,c = img.shape
     result_dict={}
     tl = 1 or round(0.002 * (h + w) / 2) + 1  # line/font thickness
@@ -101,10 +101,12 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
 
     class_label= int(class_num)  #车牌的的类型0代表单牌，1代表双层车牌
     roi_img = four_point_transform(img,landmarks_np)   #透视变换得到车牌小图
-    color_code = plate_color_rec(roi_img,plate_color_model,device) #车牌颜色识别
     if class_label:        #判断是否是双层车牌，是双牌的话进行分割后然后拼接
         roi_img=get_split_merge(roi_img)
-    plate_number,rec_prob = get_plate_result(roi_img,device,plate_rec_model)                 #对车牌小图进行识别
+    if not is_color:
+        plate_number,rec_prob = get_plate_result(roi_img,device,plate_rec_model,is_color=is_color)                 #对车牌小图进行识别
+    else:
+        plate_number,rec_prob,plate_color,color_conf=get_plate_result(roi_img,device,plate_rec_model,is_color=is_color) 
     for dan in danger:                                                           #只要出现‘危’或者‘险’就是危险品车牌
         if dan in plate_number:
             plate_number='危险品'
@@ -115,14 +117,17 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
     result_dict['plate_no']=plate_number   #车牌号
     result_dict['rec_conf']=rec_prob   #每个字符的概率
     result_dict['roi_height']=roi_img.shape[0]  #车牌高度
-    result_dict['plate_color']=color_code   #车牌颜色
+    result_dict['plate_color']=""
+    if is_color:
+        result_dict['plate_color']=plate_color   #车牌颜色
+        result_dict['color_conf']=color_conf
     result_dict['plate_type']=class_label   #单双层 0单层 1双层
     
     return result_dict
 
 
 
-def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,plate_color_model=None):
+def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,is_color=False):
     # Load model
     # img_size = opt_img_size
     conf_thres = 0.3
@@ -154,7 +159,7 @@ def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,plat
         img = img.unsqueeze(0)
 
     # Inference
-    # t1 = time_synchronized()
+    # t1 = time_synchronized()/
     pred = model(img)[0]
     # t2=time_synchronized()
     # print(f"infer time is {(t2-t1)*1000} ms")
@@ -182,12 +187,12 @@ def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,plat
                 conf = det[j, 4].cpu().numpy()
                 landmarks = det[j, 5:13].view(-1).tolist()
                 class_num = det[j, 13].cpu().numpy()
-                result_dict = get_plate_rec_landmark(orgimg, xyxy, conf, landmarks, class_num,device,plate_rec_model,plate_color_model)
+                result_dict = get_plate_rec_landmark(orgimg, xyxy, conf, landmarks, class_num,device,plate_rec_model,is_color=is_color)
                 dict_list.append(result_dict)
     return dict_list
     # cv2.imwrite('result.jpg', orgimg)
 
-def draw_result(orgimg,dict_list):
+def draw_result(orgimg,dict_list,is_color=False):
     result_str =""
     for result in dict_list:
         rect_area = result['rect']
@@ -233,8 +238,8 @@ def get_second(capture):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model', nargs='+', type=str, default='weights/plate_detect.pt', help='model.pt path(s)')  #检测模型
-    parser.add_argument('--rec_model', type=str, default='weights/plate_rec.pth', help='model.pt path(s)')#识别模型
-    parser.add_argument('--color_model',type=str,default='weights/color_classify.pth',help='plate color')#颜色识别模型
+    parser.add_argument('--rec_model', type=str, default='weights/plate_rec_color.pth', help='model.pt path(s)')#车牌识别+颜色识别模型
+    parser.add_argument('--is_color',type=bool,default=True,help='plate color')     #是否识别颜色
     parser.add_argument('--image_path', type=str, default='imgs', help='source') 
     parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--output', type=str, default='result1', help='source') 
@@ -249,13 +254,13 @@ if __name__ == '__main__':
         os.mkdir(save_path)
 
     detect_model = load_model(opt.detect_model, device)  #初始化检测模型
-    plate_rec_model=init_model(device,opt.rec_model)      #初始化识别模型
+    plate_rec_model=init_model(device,opt.rec_model,is_color=opt.is_color)      #初始化识别模型
     #算参数量
     total = sum(p.numel() for p in detect_model.parameters())
     total_1 = sum(p.numel() for p in plate_rec_model.parameters())
     print("detect params: %.2fM,rec params: %.2fM" % (total/1e6,total_1/1e6))
     
-    plate_color_model =init_color_model(opt.color_model,device)
+    # plate_color_model =init_color_model(opt.color_model,device)
     time_all = 0
     time_begin=time.time()
     if not opt.video:     #处理图片
@@ -273,7 +278,7 @@ if __name__ == '__main__':
                 if img.shape[-1]==4:
                     img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
                 # detect_one(model,img_path,device)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,plate_color_model)
+                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,is_color=opt.is_color)
                 ori_img=draw_result(img,dict_list)
                 img_name = os.path.basename(img_path)
                 save_img_path = os.path.join(save_path,img_name)
@@ -283,18 +288,19 @@ if __name__ == '__main__':
                     time_all+=time_gap
                 cv2.imwrite(save_img_path,ori_img)
                 count+=1
+            print(f"sumTime time is {time.time()-time_begin} s, average pic time is {time_all/(len(file_list)-1)}")
         else:                                          #单个图片
                 print(count,opt.image_path,end=" ")
                 img =cv_imread(opt.image_path)
                 if img.shape[-1]==4:
                     img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
                 # detect_one(model,img_path,device)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size)
+                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,is_color=opt.is_color)
                 ori_img=draw_result(img,dict_list)
                 img_name = os.path.basename(opt.image_path)
                 save_img_path = os.path.join(save_path,img_name)
                 cv2.imwrite(save_img_path,ori_img)  
-        print(f"sumTime time is {time.time()-time_begin} s, average pic time is {time_all/(len(file_list)-1)}")
+        
         
     else:    #处理视频
         video_name = opt.video
@@ -316,7 +322,7 @@ if __name__ == '__main__':
                     break
                 # if frame_count%rate==0:
                 img0 = copy.deepcopy(img)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,plate_color_model)
+                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,is_color=opt.is_color)
                 ori_img=draw_result(img,dict_list)
                 t2 =cv2.getTickCount()
                 infer_time =(t2-t1)/cv2.getTickFrequency()

@@ -153,7 +153,7 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
                 file.write(ckpt['training_results'])  # write results.txt
 
         # Epochs
-        # start_epoch = ckpt['epoch'] + 1
+        start_epoch = ckpt['epoch'] + 1
         if opt.resume:
             assert start_epoch > 0, '%s training to %g epochs is finished, nothing to resume.' % (weights, epochs)
         if epochs < start_epoch:
@@ -438,8 +438,8 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default='weights/yolov5s.pt', help='initial weights path')
-    parser.add_argument('--cfg', type=str, default='models/yolov5s.yaml', help='model.yaml path')
+    parser.add_argument('--weights', type=str, default='weights/plate_detect.pt', help='initial weights path')
+    parser.add_argument('--cfg', type=str, default='models/yolov5n-0.5.yaml', help='model.yaml path')
     parser.add_argument('--data', type=str, default='data/widerface.yaml', help='data.yaml path')
     parser.add_argument('--hyp', type=str, default='data/hyp.scratch.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=120)
