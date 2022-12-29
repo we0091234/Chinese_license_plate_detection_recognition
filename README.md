@@ -95,7 +95,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 ## 部署
 
-1. **NCNN** [NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
+1. [安卓NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
 
 2.**onnx demo**，onnx模型见[onnx模型](https://pan.baidu.com/s/1UmWN2kpRP96h2cM6Pi-now)，提取码：ixyr
 
