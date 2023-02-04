@@ -52,7 +52,7 @@ def four_point_transform(image, pts):                       #透视变换得到�
     warped = cv2.warpPerspective(image, M, (maxWidth, maxHeight))
     return warped
 
-def load_model(weights, device):
+def load_model(weights, device):   #加载检测模型
     model = attempt_load(weights, map_location=device)  # load FP32 model
     return model
 
@@ -82,7 +82,7 @@ def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):  #�
     return coords
 
 
-def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_rec_model,is_color=False):
+def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_rec_model,is_color=False):  #获取车牌坐标以及四个角点坐标并获取车牌号
     h,w,c = img.shape
     result_dict={}
     tl = 1 or round(0.002 * (h + w) / 2) + 1  # line/font thickness
@@ -127,7 +127,7 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
 
 
 
-def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,is_color=False):
+def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,is_color=False):#获取车牌信息
     # Load model
     # img_size = opt_img_size
     conf_thres = 0.3
@@ -192,7 +192,7 @@ def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,is_c
     return dict_list
     # cv2.imwrite('result.jpg', orgimg)
 
-def draw_result(orgimg,dict_list,is_color=False):
+def draw_result(orgimg,dict_list,is_color=False):   # 车牌结果画出来
     result_str =""
     for result in dict_list:
         rect_area = result['rect']
