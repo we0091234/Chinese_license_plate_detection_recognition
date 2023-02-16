@@ -11,7 +11,7 @@
 #### **图片测试demo:**
 
 ```
-python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weights/plate_rec.pth --image_path imgs --output result
+python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weights/plate_rec_color.pth --image_path imgs --output result
 ```
 
 测试文件夹imgs，结果保存再 result 文件夹中
@@ -100,7 +100,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 2.**onnx demo**，onnx模型见[onnx模型](https://pan.baidu.com/s/1UmWN2kpRP96h2cM6Pi-now)，提取码：ixyr
 
 ```
-python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec_color.onnx  --image_path imgs --output result_onnx
+python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec.onnx  --image_path imgs --output result_onnx
 ```
 
 3.**tensorrt** 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)
