@@ -67,7 +67,7 @@ def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):  #�
 
     coords[:, [0, 2, 4, 6]] -= pad[0]  # x padding
     coords[:, [1, 3, 5, 7]] -= pad[1]  # y padding
-    coords[:, :10] /= gain
+    coords[:, :8] /= gain
     #clip_coords(coords, img0_shape)
     coords[:, 0].clamp_(0, img0_shape[1])  # x1
     coords[:, 1].clamp_(0, img0_shape[0])  # y1
@@ -120,7 +120,7 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
     result_dict['plate_color']=""
     if is_color:
         result_dict['plate_color']=plate_color   #车牌颜色
-        result_dict['color_conf']=color_conf
+        result_dict['color_conf']=color_conf    #颜色得分
     result_dict['plate_type']=class_label   #单双层 0单层 1双层
     
     return result_dict
