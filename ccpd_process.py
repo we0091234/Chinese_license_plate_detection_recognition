@@ -75,12 +75,12 @@ def get_rect_and_landmarks(img_path):
    for i in range(4):
         landmarks_np[i][0]=landmarks[2*i]
         landmarks_np[i][1]=landmarks[2*i+1]
-   middle_landmark_w =int((landmarks[4]+landmarks[6])/2) 
-   middle_landmark_h =int((landmarks[5]+landmarks[7])/2) 
-   landmarks.append(middle_landmark_w)
-   landmarks.append(middle_landmark_h)
+#    middle_landmark_w =int((landmarks[4]+landmarks[6])/2) 
+#    middle_landmark_h =int((landmarks[5]+landmarks[7])/2) 
+#    landmarks.append(middle_landmark_w)
+#    landmarks.append(middle_landmark_h)
    landmarks_np_new=order_points(landmarks_np)
-   landmarks_np_new[4]=np.array([middle_landmark_w,middle_landmark_h])
+#    landmarks_np_new[4]=np.array([middle_landmark_w,middle_landmark_h])
    return rect,landmarks,landmarks_np_new
 
 def x1x2y1y2_yolo(rect,landmarks,img):
@@ -103,8 +103,8 @@ def x1x2y1y2_yolo(rect,landmarks,img):
     annotation[0, 9] = landmarks[5] / h # l2_y
     annotation[0, 10] = landmarks[6] / w  # l3_x
     annotation[0, 11] = landmarks[7] / h  # l3_y
-    annotation[0, 12] = landmarks[8] / w  # l4_x
-    annotation[0, 13] = landmarks[9] / h  # l4_y
+    # annotation[0, 12] = landmarks[8] / w  # l4_x
+    # annotation[0, 13] = landmarks[9] / h  # l4_y
     return annotation
 
 def xywh2yolo(rect,landmarks_sort,img):
@@ -113,7 +113,7 @@ def xywh2yolo(rect,landmarks_sort,img):
     rect[1] = max(0, rect[1])
     rect[2] = min(w - 1, rect[2]-rect[0])
     rect[3] = min(h - 1, rect[3]-rect[1])
-    annotation = np.zeros((1, 14))
+    annotation = np.zeros((1, 12))
     annotation[0, 0] = (rect[0] + rect[2] / 2) / w  # cx
     annotation[0, 1] = (rect[1] + rect[3] / 2) / h  # cy
     annotation[0, 2] = rect[2] / w  # w
@@ -127,8 +127,8 @@ def xywh2yolo(rect,landmarks_sort,img):
     annotation[0, 9] = landmarks_sort[2][1] / h # l2_y
     annotation[0, 10] = landmarks_sort[3][0] / w  # l3_x
     annotation[0, 11] = landmarks_sort[3][1] / h  # l3_y
-    annotation[0, 12] = landmarks_sort[4][0] / w  # l4_x
-    annotation[0, 13] = landmarks_sort[4][1] / h  # l4_y
+    # annotation[0, 12] = landmarks_sort[4][0] / w  # l4_x
+    # annotation[0, 13] = landmarks_sort[4][1] / h  # l4_y
     return annotation
 
 def yolo2x1y1x2y2(annotation,img):
@@ -150,7 +150,7 @@ def write_lable(file_path):
 
 
 if __name__ == '__main__':
-   file_root = r"ccpd/val"
+   file_root = r"ccpd"
    file_list=[]
    count=0
    allFilePath(file_root,file_list)

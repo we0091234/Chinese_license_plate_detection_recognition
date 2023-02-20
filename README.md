@@ -4,7 +4,7 @@
 
 [yolov7 车牌检测+识别](https://github.com/we0091234/yolov7_plate)
 
-## **最全车牌识别算法，支持14种中文车牌类型**
+## **最全车牌识别算法，支持12种中文车牌类型**
 
 **环境要求: python >=3.6  pytorch >=1.7**
 
@@ -85,11 +85,11 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 - [X] 7.双层黄牌
 - [X] 8.双层武警
 - [X] 9.使馆车牌
-- [X] 10.港澳牌车
+- [X] 10.港澳粤Z牌
 - [X] 11.双层农用车牌
 - [X] 12.民航车牌
-- [X] 13.摩托车牌
-- [X] 14.危险品车牌
+
+
 
 ![Image ](image/README/test_1.jpg)
 
