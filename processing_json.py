@@ -70,9 +70,9 @@ def four_point_transform(image, pts):
             
 if __name__ == "__main__":
     pic_file_list = []
-    pic_file = r"test"
+    pic_file = r"/mnt/Gpan/Mydata/pytorchPorject/datasets/ccpd/train_bisai/train_bisai"
     save_small_path = "small"
-    label_file = ['single','double']
+    label_file = ['0','1']
     allFilePath(pic_file,pic_file_list)
     count=0
     index = 0
@@ -96,7 +96,7 @@ if __name__ == "__main__":
                     label=data_message['label']
                     points = data_message['points']
                     pts = np.array(points)
-                    pts=order_points(pts)
+                    # pts=order_points(pts)
                     new_img = four_point_transform(img,pts)
                     roi_img_name = label+"_"+str(index)+".jpg"
                     save_path=os.path.join(save_small_path,roi_img_name)

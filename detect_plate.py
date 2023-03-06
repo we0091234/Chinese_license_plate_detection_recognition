@@ -19,7 +19,6 @@ from utils.cv_puttext import cv2ImgAddText
 from plate_recognition.plate_rec import get_plate_result,allFilePath,init_model,cv_imread
 # from plate_recognition.plate_cls import cv_imread
 from plate_recognition.double_plate_split_merge import get_split_merge
-from plate_recognition.color_rec import plate_color_rec,init_color_model
 
 clors = [(255,0,0),(0,255,0),(0,0,255),(255,255,0),(0,255,255)]
 danger=['危','险']
@@ -35,7 +34,8 @@ def order_points(pts):                   #四个点按照左上 右上 右下 �
 
 
 def four_point_transform(image, pts):                       #透视变换得到车牌小图
-    rect = order_points(pts)
+    # rect = order_points(pts)
+    rect = pts.astype('float32')
     (tl, tr, br, bl) = rect
     widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
     widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
@@ -107,9 +107,6 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
         plate_number,rec_prob = get_plate_result(roi_img,device,plate_rec_model,is_color=is_color)                 #对车牌小图进行识别
     else:
         plate_number,rec_prob,plate_color,color_conf=get_plate_result(roi_img,device,plate_rec_model,is_color=is_color) 
-    for dan in danger:                                                           #只要出现‘危’或者‘险’就是危险品车牌
-        if dan in plate_number:
-            plate_number='危险品'
     # cv2.imwrite("roi.jpg",roi_img)
     result_dict['rect']=rect                      #车牌roi区域
     result_dict['detect_conf']=conf              #检测区域得分
@@ -217,10 +214,7 @@ def draw_result(orgimg,dict_list,is_color=False):   # 车牌结果画出来
             cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
         cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,0,255),2) #画框
         if len(result)>=1:
-            if "危险品" in result_p: #如果是危险品车牌，文字就画在下面
-                orgimg=cv2ImgAddText(orgimg,result_p,rect_area[0],rect_area[3],(0,255,0),height_area)
-            else:
-                orgimg=cv2ImgAddText(orgimg,result_p,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
+            orgimg=cv2ImgAddText(orgimg,result_p,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
                
     print(result_str)
     return orgimg
@@ -237,10 +231,10 @@ def get_second(capture):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--detect_model', nargs='+', type=str, default='weights/plate_detect.pt', help='model.pt path(s)')  #检测模型
+    parser.add_argument('--detect_model', nargs='+', type=str, default='runs/train/exp40/weights/best.pt', help='model.pt path(s)')  #检测模型
     parser.add_argument('--rec_model', type=str, default='weights/plate_rec_color.pth', help='model.pt path(s)')#车牌识别+颜色识别模型
     parser.add_argument('--is_color',type=bool,default=True,help='plate color')     #是否识别颜色
-    parser.add_argument('--image_path', type=str, default='imgs', help='source') 
+    parser.add_argument('--image_path', type=str, default='gangao/Test', help='source') 
     parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--output', type=str, default='result1', help='source') 
     parser.add_argument('--video', type=str, default='', help='source') 
