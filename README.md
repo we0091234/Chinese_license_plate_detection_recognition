@@ -4,6 +4,8 @@
 
 [yolov7 车牌检测+识别](https://github.com/we0091234/yolov7_plate)
 
+[安卓NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
+
 ## **最全车牌识别算法，支持12种中文车牌类型**
 
 **环境要求: python >=3.6  pytorch >=1.7**

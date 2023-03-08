@@ -45,6 +45,7 @@ class Detect(nn.Module):
     def forward(self, x):
         # x = x.copy()  # for profiling
         z = []  # inference output
+        # self.training=True
         if self.export_cat:
             for i in range(self.nl):
                 x[i] = self.m[i](x[i])  # conv
