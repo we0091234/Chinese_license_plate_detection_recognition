@@ -91,18 +91,16 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 - [X] 11.双层绿牌
 - [X] 12.民航车牌
 
-
-
 ![Image ](image/README/test_1.jpg)
 
 ## 部署
 
 1. [安卓NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
 
-2.**onnx demo**，onnx模型见[onnx模型](https://pan.baidu.com/s/1UmWN2kpRP96h2cM6Pi-now)，提取码：ixyr
+2.**onnx demo** 百度网盘**： [k874](https://pan.baidu.com/s/1K3L3xubd6pXIreAydvUm4g)**
 
 ```
-python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec.onnx  --image_path imgs --output result_onnx
+python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weights/plate_rec_color.onnx  --image_path imgs --output result_onnx
 ```
 
 3.**tensorrt** 部署见[tensorrt_plate](https://github.com/we0091234/chinese_plate_tensorrt)

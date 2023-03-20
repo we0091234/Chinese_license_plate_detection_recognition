@@ -6,7 +6,7 @@ import os
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import time
-
+plate_color_list=['黑色','蓝色','绿色','白色','黄色']
 plateName=r"#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民航危0123456789ABCDEFGHJKLMNPQRSTUVWXYZ险品"
 mean_value,std_value=((0.588,0.193))#识别模型均值标准差
 
@@ -33,13 +33,13 @@ def rec_pre_precessing(img,size=(48,168)): #识别前处理
 
 def get_plate_result(img,session_rec): #识别后处理
     img =rec_pre_precessing(img)
-    y_onnx = session_rec.run([session_rec.get_outputs()[0].name], {session_rec.get_inputs()[0].name: img})[0]
+    y_onnx_plate,y_onnx_color = session_rec.run([session_rec.get_outputs()[0].name,session_rec.get_outputs()[1].name], {session_rec.get_inputs()[0].name: img})
+    index =np.argmax(y_onnx_plate,axis=-1)
+    index_color = np.argmax(y_onnx_color)
+    plate_color = plate_color_list[index_color]
     # print(y_onnx[0])
-    index =np.argmax(y_onnx[0],axis=1)  #找出概率最大的那个字符的序号
-    # print(y_onnx[0])
-    plate_no = decodePlate(index)
-    # plate_no = decodePlate(y_onnx[0])
-    return plate_no
+    plate_no = decodePlate(index[0])
+    return plate_no,plate_color
 
 
 def allFilePath(rootPath,allFIleList):  #遍历文件
@@ -173,11 +173,12 @@ def rec_plate(outputs,img0,session_rec):  #识别车牌
         score = output[4]
         if label==1:  #代表是双层车牌
             roi_img = get_split_merge(roi_img)
-        plate_no = get_plate_result(roi_img,session_rec)
+        plate_no,plate_color = get_plate_result(roi_img,session_rec)
         result_dict['rect']=rect
         result_dict['landmarks']=land_marks.tolist()
         result_dict['plate_no']=plate_no
         result_dict['roi_height']=roi_img.shape[0]
+        result_dict['plate_color']=plate_color
         dict_list.append(result_dict)
     return dict_list
 
@@ -209,9 +210,9 @@ def draw_result(orgimg,dict_list):
         result_str+=result+" "
         for i in range(4):  #关键点
             cv2.circle(orgimg, (int(landmarks[i][0]), int(landmarks[i][1])), 5, clors[i], -1)
-        cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(0,0,255),2) #画框
+        cv2.rectangle(orgimg,(rect_area[0],rect_area[1]),(rect_area[2],rect_area[3]),(255,255,0),2) #画框
         if len(result)>=1:
-            orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(255,0,0),height_area)
+            orgimg=cv2ImgAddText(orgimg,result,rect_area[0]-height_area,rect_area[1]-height_area-10,(0,255,0),height_area)
     print(result_str)
     return orgimg
 
@@ -219,7 +220,7 @@ if __name__ == "__main__":
     begin = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model',type=str, default=r'weights/plate_detect.onnx', help='model.pt path(s)')  #检测模型
-    parser.add_argument('--rec_model', type=str, default='weights/plate_rec.onnx', help='model.pt path(s)')#识别模型
+    parser.add_argument('--rec_model', type=str, default='weights/plate_rec_color.onnx', help='model.pt path(s)')#识别模型
     parser.add_argument('--image_path', type=str, default='imgs', help='source') 
     parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--output', type=str, default='result1', help='source') 
