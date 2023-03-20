@@ -127,8 +127,8 @@ def get_plate_rec_landmark(img, xyxy, conf, landmarks, class_num,device,plate_re
 def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,is_color=False):#获取车牌信息
     # Load model
     # img_size = opt_img_size
-    conf_thres = 0.3
-    iou_thres = 0.5
+    conf_thres = 0.3      #得分阈值
+    iou_thres = 0.5       #nms的iou值   
     dict_list=[]
     # orgimg = cv2.imread(image_path)  # BGR
     img0 = copy.deepcopy(orgimg)
@@ -139,12 +139,12 @@ def detect_Recognition_plate(model, orgimg, device,plate_rec_model,img_size,is_c
         interp = cv2.INTER_AREA if r < 1  else cv2.INTER_LINEAR
         img0 = cv2.resize(img0, (int(w0 * r), int(h0 * r)), interpolation=interp)
 
-    imgsz = check_img_size(img_size, s=model.stride.max())  # check img_size
+    imgsz = check_img_size(img_size, s=model.stride.max())  # check img_size  
 
-    img = letterbox(img0, new_shape=imgsz)[0]
+    img = letterbox(img0, new_shape=imgsz)[0]           #检测前处理，图片长宽变为32倍数，比如变为640X640
     # img =process_data(img0)
     # Convert
-    img = img[:, :, ::-1].transpose(2, 0, 1).copy()  # BGR to RGB, to 3x416x416
+    img = img[:, :, ::-1].transpose(2, 0, 1).copy()  # BGR to RGB, to 3x416x416  图片的BGR排列转为RGB,然后将图片的H,W,C排列变为C,H,W排列
 
     # Run inference
     t0 = time.time()
@@ -233,18 +233,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--detect_model', nargs='+', type=str, default='weights/plate_detect.pt', help='model.pt path(s)')  #检测模型
     parser.add_argument('--rec_model', type=str, default='weights/plate_rec_color.pth', help='model.pt path(s)')#车牌识别+颜色识别模型
-    parser.add_argument('--is_color',type=bool,default=True,help='plate color')     #是否识别颜色
-    parser.add_argument('--image_path', type=str, default='imgs', help='source') 
-    parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')
-    parser.add_argument('--output', type=str, default='result1', help='source') 
-    parser.add_argument('--video', type=str, default='', help='source') 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    parser.add_argument('--is_color',type=bool,default=True,help='plate color')      #是否识别颜色
+    parser.add_argument('--image_path', type=str, default='imgs', help='source')     #图片路径
+    parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')  #网络输入图片大小
+    parser.add_argument('--output', type=str, default='result1', help='source')               #图片结果保存的位置
+    parser.add_argument('--video', type=str, default='', help='source')                       #视频的路径
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")                     #使用gpu还是cpu进行识别
     # device =torch.device("cpu")
     opt = parser.parse_args()
     print(opt)
-    save_path = opt.output
+    save_path = opt.output                
     count=0
-    if not os.path.exists(save_path):
+    if not os.path.exists(save_path): 
         os.mkdir(save_path)
 
     detect_model = load_model(opt.detect_model, device)  #初始化检测模型
@@ -260,27 +260,27 @@ if __name__ == '__main__':
     if not opt.video:     #处理图片
         if not os.path.isfile(opt.image_path):            #目录
             file_list=[]
-            allFilePath(opt.image_path,file_list)
-            for img_path in file_list:
+            allFilePath(opt.image_path,file_list)  #将这个目录下的所有图片文件路径读取到file_list里面
+            for img_path in file_list:             #遍历图片文件
                 
                 print(count,img_path,end=" ")
-                time_b = time.time()
-                img =cv_imread(img_path)
+                time_b = time.time()               #开始时间
+                img =cv_imread(img_path)           #opencv 读取图片
                 
-                if img is None:
+                if img is None:                   
                     continue
-                if img.shape[-1]==4:
+                if img.shape[-1]==4:               #图片如果是4个通道的，将其转为3个通道
                     img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
                 # detect_one(model,img_path,device)
-                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,is_color=opt.is_color)
-                ori_img=draw_result(img,dict_list)
-                img_name = os.path.basename(img_path)
-                save_img_path = os.path.join(save_path,img_name)
+                dict_list=detect_Recognition_plate(detect_model, img, device,plate_rec_model,opt.img_size,is_color=opt.is_color)#检测以及识别车牌
+                ori_img=draw_result(img,dict_list)  #将结果画在图上
+                img_name = os.path.basename(img_path)  
+                save_img_path = os.path.join(save_path,img_name)  #图片保存的路径
                 time_e=time.time()
-                time_gap = time_e-time_b
+                time_gap = time_e-time_b                         #计算单个图片识别耗时
                 if count:
-                    time_all+=time_gap
-                cv2.imwrite(save_img_path,ori_img)
+                    time_all+=time_gap 
+                cv2.imwrite(save_img_path,ori_img)               #opencv将识别的图片保存
                 count+=1
             print(f"sumTime time is {time.time()-time_begin} s, average pic time is {time_all/(len(file_list)-1)}")
         else:                                          #单个图片
