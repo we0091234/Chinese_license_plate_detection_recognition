@@ -97,7 +97,7 @@ if __name__ == "__main__":
                     points = data_message['points']
                     pts = np.array(points)
                     # pts=order_points(pts)
-                    new_img = four_point_transform(img,pts)
+                    # new_img = four_point_transform(img,pts)
                     roi_img_name = label+"_"+str(index)+".jpg"
                     save_path=os.path.join(save_small_path,roi_img_name)
                     # cv2.imwrite(save_path,new_img)
