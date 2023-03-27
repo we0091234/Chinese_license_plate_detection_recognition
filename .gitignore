@@ -9,6 +9,7 @@ runs/
 .vscode/
 build/
 result1/
+result/
 mytest/
 mytest_double/
 pretrained_model/
