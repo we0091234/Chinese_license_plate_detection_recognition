@@ -12,6 +12,8 @@
 
 #### **图片测试demo:**
 
+直接运行detect_plate.py 或者运行如下命令行：
+
 ```
 python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weights/plate_rec_color.pth --image_path imgs --output result
 ```
@@ -37,11 +39,13 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
    关键点依次是（左上，右上，右下，左下）
    坐标都是经过归一化，x,y是中心点除以图片宽高，w,h是框的宽高除以图片宽高，ptx，pty是关键点坐标除以宽高
+
+   **自己的数据集**可以通过lablme 软件,create polygons标注车牌四个点即可，然后通过json2yolo.py 将数据集转为yolo格式，即可训练
 2. **修改 data/widerface.yaml    train和val路径,换成你的数据路径**
 
    ```
-   train: /your/train/path #修改成你的路径
-   val: /your/val/path     #修改成你的路径
+   train: /your/train/path #修改成你的训练集路径
+   val: /your/val/path     #修改成你的验证集路径
    # number of classes
    nc: 2                 #这里用的是2分类，0 单层车牌 1 双层车牌
 
@@ -52,7 +56,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 3. **训练**
 
    ```
-   python3 train.py --data data/widerface.yaml --cfg models/yolov5n-0.5.yaml --weights weights/plate_detect.pt --epoch 250
+   python3 train.py --data data/widerface.yaml --cfg models/yolov5n-0.5.yaml --weights weights/plate_detect.pt --epoch 120
    ```
 
    结果存在run文件夹中
@@ -95,7 +99,7 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 ## 部署
 
-1. [安卓NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
+1.[安卓NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
 
 2.**onnx demo** 百度网盘**： [k874](https://pan.baidu.com/s/1K3L3xubd6pXIreAydvUm4g)**
 
@@ -114,7 +118,7 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 ## References
 
 * [https://github.com/deepcam-cn/yolov5-face](https://github.com/deepcam-cn/yolov5-face)
-* [https://github.com/meijieru/crnn.pytorch](https://github.com/meijieru/crnn.pytorch)
+* [https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec](https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec)
 
 ## 联系
 

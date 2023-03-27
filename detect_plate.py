@@ -243,7 +243,7 @@ if __name__ == '__main__':
     parser.add_argument('--is_color',type=bool,default=True,help='plate color')      #是否识别颜色
     parser.add_argument('--image_path', type=str, default='imgs', help='source')     #图片路径
     parser.add_argument('--img_size', type=int, default=640, help='inference size (pixels)')  #网络输入图片大小
-    parser.add_argument('--output', type=str, default='result1', help='source')               #图片结果保存的位置
+    parser.add_argument('--output', type=str, default='result', help='source')               #图片结果保存的位置
     parser.add_argument('--video', type=str, default='', help='source')                       #视频的路径
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")                     #使用gpu还是cpu进行识别
     # device =torch.device("cpu")
