@@ -31,3 +31,4 @@ ccpd/
 !*.pth
 !*.png
 !*.yaml
+!*.md
