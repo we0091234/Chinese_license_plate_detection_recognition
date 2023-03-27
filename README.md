@@ -30,9 +30,9 @@ python detect_plate.py --detect_model weights/plate_detect.pt  --rec_model weigh
 
 ## **车牌检测训练**
 
-车牌识别训练链接如下：
+车牌检测训练链接如下：
 
-[车牌识别训练](https://github.com/we0091234/crnn_plate_recognition)
+[车牌检测训练](https://github.com/we0091234/Chinese_license_plate_detection_recognition/tree/main/readme)
 
 ## **车牌识别训练**
 
