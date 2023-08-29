@@ -10,7 +10,8 @@
 download: bash data/scripts/get_voc.sh
 
 # train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
-train: /mnt/Gpan/Mydata/pytorchPorject/datasets/ccpd/train_car_plate/train_detect  
+train: /mnt/Gpan/Mydata/pytorch
+Porject/datasets/ccpd/train_car_plate/train_detect  
 val: /mnt/Gpan/Mydata/pytorchPorject/datasets/ccpd/train_car_plate/val_detect
 # number of classes
 nc: 3
