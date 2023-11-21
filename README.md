@@ -2,6 +2,8 @@
 
 **2022.12.04 车辆和车牌一起检测看这里[车辆系统](https://github.com/we0091234/Car_recognition)**
 
+[yolov8 车牌检测+识别](https://github.com/we0091234/yolov8-plate)
+
 [yolov7 车牌检测+识别](https://github.com/we0091234/yolov7_plate)
 
 [安卓NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
