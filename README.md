@@ -84,7 +84,7 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 
 ## 联系
 
-**有问题添加微信: xiaolei19920229，拉进微信群**
+**有问题添加微信: we0091234，拉进微信群**
 
 **或者加qq群:871797331 询问**
 

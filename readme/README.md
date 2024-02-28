@@ -1,6 +1,7 @@
 ### **车牌检测训练**
 
-1. **下载数据集：**  [datasets](https://pan.baidu.com/s/1xa6zvOGjU02j8_lqHGVf0A) 提取码：pi6c     数据从CCPD和CRPD数据集中选取并转换的
+1. **下载数据集：**  数据集可以联系vx获取：we0091234  
+  数据从CCPD和CRPD数据集中选取并转换的
    数据集格式为yolo格式：
 
    ```
