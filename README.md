@@ -2,6 +2,8 @@
 
 **2022.12.04 车辆和车牌一起检测看这里[车辆系统](https://github.com/we0091234/Car_recognition)**
 
+[yolov8 车牌检测+识别](https://github.com/we0091234/yolov8-plate)
+
 [yolov7 车牌检测+识别](https://github.com/we0091234/yolov7_plate)
 
 [安卓NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
@@ -82,6 +84,8 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 
 ## 联系
 
-**有问题可以提issues 或者加qq群:871797331 询问**
+**有问题添加微信: we0091234，拉进微信群**
+
+**或者加qq群:871797331 询问**
 
 ![Image ](image/README/1.png)
