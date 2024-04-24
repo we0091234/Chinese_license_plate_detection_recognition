@@ -87,8 +87,7 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 * [https://github.com/deepcam-cn/yolov5-face](https://github.com/deepcam-cn/yolov5-face)
 * [https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec](https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec)
 
-## 联系
-wechat: we0091234  （注明来意）
-**或者加qq群:871797331(已满) 837982567（二群） 询问**
+## More
+**qq群:871797331(已满) 837982567（二群） 询问**
 
 ![Image ](image/README/105384078.png)
