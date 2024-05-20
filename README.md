@@ -8,6 +8,11 @@
 
 [安卓NCNN](https://github.com/Ayers-github/Chinese-License-Plate-Recognition)
 
+## 联系
+模型用的是公开数据集训练出来的，需要准确率更高的模型，或者商务合作请加
+
+**wechat: we0091234  （注明来意）**
+
 ## **最全车牌识别算法，支持12种中文车牌类型**
 
 **环境要求: python >=3.6  pytorch >=1.7**
@@ -82,10 +87,7 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 * [https://github.com/deepcam-cn/yolov5-face](https://github.com/deepcam-cn/yolov5-face)
 * [https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec](https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec)
 
-## 联系
+## More
+**qq群:871797331(已满) 837982567（二群） 询问**
 
-**有问题添加微信: we0091234，拉进微信群**
-
-**或者加qq群:871797331 询问**
-
-![Image ](image/README/1.png)
+![Image ](image/README/105384078.png)
