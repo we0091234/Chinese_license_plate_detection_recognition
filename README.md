@@ -88,6 +88,5 @@ python onnx_infer.py --detect_model weights/plate_detect.onnx  --rec_model weigh
 * [https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec](https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec)
 
 ## More
-**qq群:871797331(已满) 837982567（二群） 询问**
+**qq群:769809695（三群新开）  871797331(已满) 837982567（二群已满） 询问**
 
-![Image ](image/README/105384078.png)
